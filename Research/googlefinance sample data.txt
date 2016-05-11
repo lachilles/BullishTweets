@@ -1,0 +1,25 @@
+>>> from googlefinance import getQuotes
+>>> import json
+>>> print json.dumps(getQuotes('AAPL'), indent=2)
+[
+  {
+    "Index": "NASDAQ", 
+    "ExtHrsChange": "-0.10", 
+    "LastTradePrice": "92.51", 
+    "LastTradeWithCurrency": "92.51", 
+    "PreviousClosePrice": "93.42", 
+    "LastTradeDateTime": "2016-05-11T16:00:02Z", 
+    "ExtHrsChangePercent": "-0.11", 
+    "ExtHrsLastTradePrice": "92.41", 
+    "ChangePercent": "-0.91", 
+    "ID": "22144", 
+    "LastTradeTime": "4:00PM EDT", 
+    "LastTradeDateTimeLong": "May 11, 4:00PM EDT", 
+    "Yield": "2.46", 
+    "Dividend": "0.57", 
+    "LastTradeSize": "2", 
+    "StockSymbol": "AAPL", 
+    "ExtHrsLastTradeWithCurrency": "92.41", 
+    "ExtHrsLastTradeDateTimeLong": "May 11, 4:35PM EDT"
+  }
+]

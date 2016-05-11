@@ -1,0 +1,39 @@
+>>> from yahoo_finance import Share
+>>> yahoo = Share('YHOO')
+>>> print yahoo.get_price()
+37.45
+>>> print yahoo.get_trade_datetime()
+2016-05-11 16:18:00 UTC+0000
+
+
+>>> pprint(yahoo.get_historical('2014-04-25', '2014-04-29'))
+[{'Adj_Close': '35.830002',
+  'Close': '35.830002',
+  'Date': '2014-04-29',
+  'High': '35.889999',
+  'Low': '34.119999',
+  'Open': '34.369999',
+  'Symbol': 'YHOO',
+  'Volume': '28736000'},
+ {'Adj_Close': '33.990002',
+  'Close': '33.990002',
+  'Date': '2014-04-28',
+  'High': '35.00',
+  'Low': '33.650002',
+  'Open': '34.669998',
+  'Symbol': 'YHOO',
+  'Volume': '31019200'},
+ {'Adj_Close': '34.48',
+  'Close': '34.48',
+  'Date': '2014-04-25',
+  'High': '35.099998',
+  'Low': '34.290001',
+  'Open': '35.029999',
+  'Symbol': 'YHOO',
+  'Volume': '19401600'}]
+>>> print yahoo.get_market_cap()
+35.33B
+>>> print yahoo.get_avg_daily_volume()
+15346900
+>>> print yahoo.get_change()
++0.01

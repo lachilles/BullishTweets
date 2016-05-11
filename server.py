@@ -5,7 +5,8 @@ from jinja2 import StrictUndefined
 from flask import Flask, render_template, redirect, request, flash, session
 #from flask_debugtoolbar import DebugToolbarExtension
 
-from model import Stock, Tweet,connect_to_db, db
+from model import Stock, connect_to_db, db
+# need to import Tweet table as part of phase 2
 
 
 app = Flask(__name__)
