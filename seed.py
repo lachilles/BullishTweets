@@ -19,9 +19,10 @@ def load_stocks():
     Stock.query.delete()
 
     # Read u.user file and insert data
-    for row in open("seed_data/SPX_constituents.csv"):
-        row = row.rstrip()
-        ticker, name, sector, industry = row.split(",")
+    for row in open("seed_data/SPX_constituents.txt"):
+        row = row.strip()
+        print row
+        ticker, name, sector, industry = row.split("\t")
 
         stock = Stock(ticker=ticker,
                     name=name,

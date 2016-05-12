@@ -18,9 +18,9 @@ class Stock(db.Model):
     __tablename__ = "stocks"
 
     ticker = db.Column(db.String(6), nullable=False, primary_key=True)
-    name = db.Column(db.String(64), nullable=False)
-    sector = db.Column(db.String(64), nullable=False)
-    industry = db.Column(db.String(64), nullable=False)
+    name = db.Column(db.String(42), nullable=False)
+    sector = db.Column(db.String(30), nullable=False)
+    industry = db.Column(db.String(56), nullable=False)
     
     def __repr__(self):
         """Provide helpful representation when printed."""
