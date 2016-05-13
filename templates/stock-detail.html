@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    <h1>{{ stock.ticker }}</h1>
+    <p> {{ stock.name }}</p>
+    <p> {{ stock.sector }}</p>
+    <p> {{ stock.industry }} </p>
+    <!-- Possibly insert link to company overview for the stock -->
+
+    <h2>Intraday Data</h2>
+    <p> {{ quotes }}
+
+
+
+{% endblock %}

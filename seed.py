@@ -18,12 +18,13 @@ def load_stocks():
     # we won't be trying to add duplicate users
     Stock.query.delete()
 
+    count = 1
     # Read u.user file and insert data
-    for row in open("seed_data/SPX_constituents.txt"):
-        row = row.strip()
-        print row
+    for row in open("seed_data/SPX_constituents-tab.txt"):
+        # row = row.strip()
         ticker, name, sector, industry = row.split("\t")
-
+        print row
+        
         stock = Stock(ticker=ticker,
                     name=name,
                     sector=sector,
@@ -31,6 +32,9 @@ def load_stocks():
 
         # We need to add to the session or it won't ever be stored
         db.session.add(stock)
+        print "added" + stock
+        print count
+        count += 1
 
     # Once we're done, we should commit our work
     db.session.commit()

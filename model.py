@@ -2,6 +2,8 @@
 
 
 from flask_sqlalchemy import SQLAlchemy
+import yahoo_finance
+import requests
 
 # This is the connection to the PostgreSQL database; we're getting this through
 # the Flask-SQLAlchemy helper library. On this, we can find the `session`
@@ -26,6 +28,17 @@ class Stock(db.Model):
         """Provide helpful representation when printed."""
 
         return "Stock ticker=%s name=%s>" % (self.ticker, self.name)
+
+# def getQuotes(self):
+#     """Return intraday quotes for past 10 days"""
+    
+#     # url='http://chartapi.finance.yahoo.com/instrument/1.0/AAPL/chartdata;type=quote;range=1d/csv'
+    # response = requests.get(url)
+    # response_body = response.content
+    # data = response_body.split('\n')
+    # # Timestamp, close, high, low, open, volume in data[11]
+    # summary = data[12:17]
+    # interval_data = data[17:]
 
     # def price_str(self):
     #     """Return price formatted as string $x.xx"""

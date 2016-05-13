@@ -1,0 +1,203 @@
+https://pypi.python.org/pypi/yahoo-finance/1.1.4 - Python package
+
+
+
+
+************************************************************************
+SAMPLE DATA
+
+
+>>> from yahoo_finance import Share
+>>> yahoo = Share('YHOO')
+>>> print yahoo.get_price()
+37.45
+>>> print yahoo.get_trade_datetime()
+2016-05-11 16:18:00 UTC+0000
+
+
+>>> pprint(yahoo.get_historical('2014-04-25', '2014-04-29'))
+[{'Adj_Close': '35.830002',
+  'Close': '35.830002',
+  'Date': '2014-04-29',
+  'High': '35.889999',
+  'Low': '34.119999',
+  'Open': '34.369999',
+  'Symbol': 'YHOO',
+  'Volume': '28736000'},
+ {'Adj_Close': '33.990002',
+  'Close': '33.990002',
+  'Date': '2014-04-28',
+  'High': '35.00',
+  'Low': '33.650002',
+  'Open': '34.669998',
+  'Symbol': 'YHOO',
+  'Volume': '31019200'},
+ {'Adj_Close': '34.48',
+  'Close': '34.48',
+  'Date': '2014-04-25',
+  'High': '35.099998',
+  'Low': '34.290001',
+  'Open': '35.029999',
+  'Symbol': 'YHOO',
+  'Volume': '19401600'}]
+>>> print yahoo.get_market_cap()
+35.33B
+>>> print yahoo.get_avg_daily_volume()
+15346900
+>>> print yahoo.get_change()
++0.01
+
+
+********************************************************************
+
+Help on package yahoo_finance:
+
+NAME
+    yahoo_finance
+
+FILE
+    /home/user/src/LA_Project/env/local/lib/python2.7/site-packages/yah
+oo_finance-1.2.1-py2.7.egg/yahoo_finance/__init__.py
+
+PACKAGE CONTENTS
+    yql
+
+CLASSES
+    Base(__builtin__.object)
+        Currency
+        Share
+    
+    class Currency(Base)
+     |  Method resolution order:
+     |      Currency
+     |      Base
+     |      __builtin__.object
+     |  
+     |  Methods defined here:
+     |  
+     |  __init__(self, symbol)
+     |  
+     |  get_ask(self)
+     |  
+     |  get_bid(self)
+     |  
+     |  get_rate(self)
+     |  
+     |  get_trade_datetime(self)
+     |  
+     |  ---------------------------------------------------------------
+-------
+     |  Methods inherited from Base:
+     |  
+     |  refresh(self)
+     |      Refresh stock data
+     |  
+     |  ---------------------------------------------------------------
+-------
+     |  Data descriptors inherited from Base:
+     |  
+     |  __dict__
+     |      dictionary for instance variables (if defined)
+     |  
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+    
+
+    class Share(Base)
+     |  Method resolution order:
+     |      Share
+     |      Base
+     |      __builtin__.object
+     |  
+     |  Methods defined here:
+     |  
+     |  __init__(self, symbol)
+     |  
+     |  get_200day_moving_avg(self)
+     |  
+     |  get_50day_moving_avg(self)
+     |  
+     |  get_avg_daily_volume(self)
+     |  
+     |  get_book_value(self)
+     |  
+     |  get_change(self)
+     |  
+     |  get_days_high(self)
+     |  
+     |  get_days_low(self)
+     |  
+     |  get_dividend_share(self)
+     |  
+     |  get_dividend_yield(self)
+     |  
+     |  get_earnings_share(self)
+     |  
+     |  get_ebitda(self)
+     |  
+     |  get_historical(self, start_date, end_date)
+     |      Get Yahoo Finance Stock historical prices
+     |      
+     |      :param start_date: string date in format '2009-09-11'
+     |      :param end_date: string date in format '2009-09-11'
+     |      :return: list
+     |  
+     |  get_info(self)
+     |      Get Yahoo Finance Stock Summary Information
+     |      
+     |      :return: dict
+     |  
+     |  get_market_cap(self)
+     |  
+     |  get_open(self)
+     |  
+     |  get_prev_close(self)
+     |  
+     |  get_price(self)
+     |  
+     |  get_price_book(self)
+     |  
+     |  get_price_earnings_growth_ratio(self)
+     |  
+     |  get_price_earnings_ratio(self)
+     |  
+     |  get_price_sales(self)
+     |  
+     |  get_short_ratio(self)
+     |  
+     |  get_stock_exchange(self)
+     |  
+     |  get_trade_datetime(self)
+     |  
+     |  get_volume(self)
+     |  
+     |  get_year_high(self)
+     |  
+     |  get_year_low(self)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from Base:
+     |  
+     |  refresh(self)
+     |      Refresh stock data
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from Base:
+     |  
+     |  __dict__
+     |      dictionary for instance variables (if defined)
+     |  
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+
+DATA
+    __all__ = ['Currency', 'Share']
+    __author__ = 'Lukasz Banasiak'
+    __loader__ = <zipimporter object "/home/user/src/LA_Project/e...2.7/si...
+    __version__ = '1.2.1'
+
+VERSION
+    1.2.1
+
+AUTHOR
+    Lukasz Banasiak
