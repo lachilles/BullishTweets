@@ -1,4 +1,5 @@
 https://pypi.python.org/pypi/yahoo-finance/1.1.4 - Python package
+http://chartapi.finance.yahoo.com/instrument/1.0/AAPL/chartdata;type=quote;range=10d/json - sample getquote for 10days intraday ticks
 
 
 

@@ -29,8 +29,8 @@ class Stock(db.Model):
 
         return "Stock ticker=%s name=%s>" % (self.ticker, self.name)
 
-# def getQuotes(self):
-#     """Return intraday quotes for past 10 days"""
+    # def get_quotes(self):
+    # """Return intraday quotes for past 10 days"""
     
 #     # url='http://chartapi.finance.yahoo.com/instrument/1.0/AAPL/chartdata;type=quote;range=1d/csv'
     # response = requests.get(url)

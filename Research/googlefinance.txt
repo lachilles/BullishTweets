@@ -1,5 +1,7 @@
 https://pypi.python.org/pypi/googlefinance - Python package
 http://www.programmableweb.com/news/96-stocks-apis-bloomberg-nasdaq-and-etrade/2013/05/22 - list of APIs
+http://www.google.com/finance/getprices?q=AAPL&i=300&p=10d&f=d,o,h,l,c,v - sample getprices for AAPL
+
 
 *************************************************************************
 SAMPLE DATA
