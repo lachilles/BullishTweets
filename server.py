@@ -4,6 +4,7 @@ from jinja2 import StrictUndefined
 
 from flask import Flask, render_template, redirect, request, flash, session
 from flask_debugtoolbar import DebugToolbarExtension
+import datetime
 
 import requests
 from model import Stock, connect_to_db, db
@@ -19,7 +20,7 @@ app.secret_key = "ABC"
 # This is horrible. Fix this so that, instead, it raises an error.
 app.jinja_env.undefined = StrictUndefined
 
-#Matches solution
+
 @app.route('/')
 def index():
     """Homepage."""
@@ -27,22 +28,32 @@ def index():
     return render_template("homepage.html")
 
 
-@app.route("/stock-detail/<ticker>")
-def stock_detail(ticker):
+@app.route("/stock-detail")
+def stock_detail():
     """Show stock details"""
-    current_stock = Stock.query.get('AAPL')
+    ticker = request.args.get("ticker")
+    current_stock = Stock.query.get(ticker)
+    # spx_member = Stock.query.filter_by(ticker="ticker").first()
+
+    # #Provide feedback to user on whether if ticker is valid
+    # if not spx_member:
+    #     flash("Please enter a valid ticker symbol")
+
     quotes = current_stock.get_quotes()
 
-    # url='http://chartapi.finance.yahoo.com/instrument/1.0/AAPL/chartdata;type=quote;range=1d/csv'
-    # response = requests.get(url)
-    # response_body = response.content
-    # data = response_body.split('\n')
-    # # Timestamp, close, high, low, open, volume in data[11]
-    # summary = data[12:17]
-    # interval_data = data[17:]
+    #num_results = len(quotes["series"])
 
-    return render_template("stock-detail.html", current_stock=stock, quotes=quotes)
+    # for i in range["num_results"]:
+    #     (datetime.datetime.fromtimestamp(
+    #         int(quotes["series"][i]["Timestamp"])
+    #         ).strftime('%Y-%m-%d %H:%M:%S'))
+    #     return quotes["series"][i]["Timestamp"]
+    #5/16 3pm last error:
+    #TypeError: 'builtin_function_or_method' object has no attribute '__getitem__'
 
+    return render_template("stock-detail.html",
+                            stock=current_stock,
+                            quotes=quotes)
 
 
 if __name__ == "__main__":

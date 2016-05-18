@@ -4,6 +4,7 @@
 from flask_sqlalchemy import SQLAlchemy
 import yahoo_finance
 import requests
+from api import get_quotes_by_api
 
 # This is the connection to the PostgreSQL database; we're getting this through
 # the Flask-SQLAlchemy helper library. On this, we can find the `session`
@@ -23,15 +24,20 @@ class Stock(db.Model):
     name = db.Column(db.String(42), nullable=False)
     sector = db.Column(db.String(30), nullable=False)
     industry = db.Column(db.String(56), nullable=False)
-    
+
     def __repr__(self):
         """Provide helpful representation when printed."""
 
         return "Stock ticker=%s name=%s>" % (self.ticker, self.name)
 
-    # def get_quotes(self):
-    # """Return intraday quotes for past 10 days"""
-    
+    def get_quotes(self):
+        """Return intraday quotes for past 10 days"""
+        return get_quotes_by_api(self.ticker)
+
+    # def get_tweets(self):
+    #     """Return last 200 tweets on ticker"""
+    #     return get_tweets_by_api(self.ticker)
+
 #     # url='http://chartapi.finance.yahoo.com/instrument/1.0/AAPL/chartdata;type=quote;range=1d/csv'
     # response = requests.get(url)
     # response_body = response.content
