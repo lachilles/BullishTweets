@@ -3,13 +3,19 @@ from pprint import pprint
 import json, requests
 import os   # To access our OS environment variables
 # Import the necessary methods from "twitter" library
-from twitter import *
+import twitter
 
 # import datetime
 # from model import Stock
 
 
-# Variables that contains the user credentials to access Twitter API 
+# Variables that contains the user credentials to access Twitter API
+api = twitter.Api(
+    consumer_key=os.environ['TWITTER_CONSUMER_KEY'],
+    consumer_secret=os.environ['TWITTER_CONSUMER_SECRET'],
+    access_token_key=os.environ['TWITTER_ACCESS_TOKEN_KEY'],
+    access_token_secret=os.environ['TWITTER_ACCESS_TOKEN_SECRET'])
+
 
 def get_quotes_by_api(ticker):
     """Return intraday quotes for past 10 days"""
@@ -36,22 +42,24 @@ def get_quotes_by_api(ticker):
     return stock_quote
 
 
-# def verify_twitter_creds():
-#     api = twitter.Api(
-#     consumer_key=os.environ['TWITTER_CONSUMER_KEY'],
-#     consumer_secret=os.environ['TWITTER_CONSUMER_SECRET'],
-#     access_token_key=os.environ['TWITTER_ACCESS_TOKEN_KEY'],
-#     access_token_secret=os.environ['TWITTER_ACCESS_TOKEN_SECRET'])
+def verify_twitter_creds():
+    api = twitter.Api(
+        consumer_key=os.environ['TWITTER_CONSUMER_KEY'],
+        consumer_secret=os.environ['TWITTER_CONSUMER_SECRET'],
+        access_token_key=os.environ['TWITTER_ACCESS_TOKEN_KEY'],
+        access_token_secret=os.environ['TWITTER_ACCESS_TOKEN_SECRET'])
 
-#     # This will print info about credentials to make sure
-#     # they're correct
-#     print api.VerifyCredentials()
+    # This will print info about credentials to make sure
+    # they're correct
+    print api.VerifyCredentials()
 
 
-# def get_tweets_by_api(ticker):
-#     """Return latest tweets for past two weeks on a single ticker"""
-#     ticker = "$" + ticker
-#     tweets = api.GetSearch(term=ticker,count=200)
+def get_tweets_by_api(ticker):
+    """Return latest tweets for past two weeks on a single ticker"""
+    ticker = "$" + ticker
+    tweets = api.GetSearch(term=ticker, count=200)
+
+    return tweets
 
 
 ### reference http://fellowship.hackbrightacademy.com/materials/f14g/lectures/apis/

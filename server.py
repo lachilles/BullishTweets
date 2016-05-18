@@ -4,9 +4,7 @@ from jinja2 import StrictUndefined
 
 from flask import Flask, render_template, redirect, request, flash, session
 from flask_debugtoolbar import DebugToolbarExtension
-import datetime
 
-import requests
 from model import Stock, connect_to_db, db
 # need to import Tweet table as part of phase 2
 
@@ -40,6 +38,7 @@ def stock_detail():
     #     flash("Please enter a valid ticker symbol")
 
     quotes = current_stock.get_quotes()
+    tweets = current_stock.get_tweets()
 
     #num_results = len(quotes["series"])
 
@@ -52,8 +51,8 @@ def stock_detail():
     #TypeError: 'builtin_function_or_method' object has no attribute '__getitem__'
 
     return render_template("stock-detail.html",
-                            stock=current_stock,
-                            quotes=quotes)
+                           stock=current_stock,
+                           quotes=quotes, tweets=tweets)
 
 
 if __name__ == "__main__":

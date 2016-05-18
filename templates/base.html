@@ -3,20 +3,22 @@
 <head>
     <title>Stock Sentiment Analysis</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap core CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
       <link href="/static/project.css" rel="stylesheet">
 </head>
 <body>
-<div class="navbar navbar-inverse navbar-static-top" role="navigation">
-
-    <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" rel="home" href="/" title="Stock Sentiment Analysis">Stock Sentiment Analysis</a>
+    <!-- Static navbar -->
+    <div class="navbar navbar-inverse navbar-static-top" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" rel="home" href="/" title="Stock Sentiment Analysis">Stock Sentiment Analysis</a>
     </div>
 
     <div class="collapse navbar-collapse navbar-ex1-collapse">
@@ -36,9 +38,6 @@
 </div>
 
 
-Stock Sentiment Analysis
-
-<hr>
 
 {% for flash in get_flashed_messages() %}
   {{ flash }}

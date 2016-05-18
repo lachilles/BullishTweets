@@ -6,6 +6,7 @@
     <p> {{ stock.sector }}</p>
     <p> {{ stock.industry }} </p>
     <!-- Possibly insert link to company overview for the stock -->
+    <!-- JINJA tweet display sourced from http://hironow.bitbucket.org/blog/html/2014/01/12/jinja2_tweets_display.html -->
 
     <h2>Intraday Data</h2>
     <div class="container-fluid">
@@ -22,13 +23,12 @@
               </ul>
             </div>
             <div class="col-md-4">
-                    <a class="twitter-timeline" href="https://twitter.com/search?q=%24MSFT" data-widget-id="731206195151659012">Tweets about $MSFT</a>
-        
-                    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
-
-                    <a class="twitter-timeline" href="https://twitter.com/search?q=%24MSFT" data-widget-id="732389404166094848">Tweets about $MSFT</a>
-                    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
-            </div>
+                {%- for tweet in tweets -%}
+                    <blockquote class="twitter-tweet">
+                    <a href="https://twitter.com/{{ tweet.user.screen_name }}/status/{{ tweet.id }}">https://twitter.com/{{ tweet.user.screen_name }}/status/{{ tweet.id }}</a>
+                </blockquote>
+            {%- endfor -%}
+            </div> 
         </div>
     </div>
 
