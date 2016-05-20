@@ -1,11 +1,10 @@
 from sys import argv
 from pprint import pprint
-import json, requests
+import json
+import requests
 import os   # To access our OS environment variables
-# Import the necessary methods from "twitter" library
-import twitter
-
-# import datetime
+import twitter  # Import the necessary methods from "twitter" library
+import datetime
 # from model import Stock
 
 
@@ -17,12 +16,42 @@ api = twitter.Api(
     access_token_secret=os.environ['TWITTER_ACCESS_TOKEN_SECRET'])
 
 
+def clean_timestamps(stock_quotes):
+    """Transform Epoch timestamp to %Y-%m-%d %H:%M:%S"""
+
+    num_results = len(stock_quotes["series"])
+
+
+    # print "&&&&&&&&&&"
+    # print "num_results is: " + str(num_results)
+    # print "&&&&&&&&&&"
+
+    clean_stock_quotes = []
+
+    for i in range(num_results):
+        stock_quote = stock_quotes["series"][i]
+        timestamp = stock_quote["Timestamp"]
+        clean_timestamp = (datetime.datetime.fromtimestamp(timestamp)
+            .strftime('%Y-%m-%d %H:%M:%S'))
+
+        clean_stock_quote = {"Timestamp": clean_timestamp, "close": stock_quote["close"],
+                             "volume": stock_quote["volume"]}
+# timestamp, price, volume
+# clean_timestamp, close, volume
+
+        clean_stock_quotes.append(clean_stock_quote)
+
+    return clean_stock_quotes
+
+# 5/16 3pm last error:
+# TypeError: 'builtin_function_or_method' object has no attribute '__getitem__'
+
+
 def get_quotes_by_api(ticker):
     """Return intraday quotes for past 10 days"""
     ##Static url for AAPL##
     #url = 'http://chartapi.finance.yahoo.com/instrument/1.0/AAPL/chartdata;type=quote;range=10d/json'
 
-    # Use below url with row 5 (Stock class)
     url = 'http://chartapi.finance.yahoo.com/instrument/1.0/' + ticker + '/chartdata;type=quote;range=10d/json'
 
     #Set payload
@@ -37,9 +66,13 @@ def get_quotes_by_api(ticker):
     json_string = json_string.strip()
 
     #Convert JSON to Python dictionary
-    stock_quote = json.loads(json_string)
+    stock_quotes = json.loads(json_string)
 
-    return stock_quote
+    clean_stock_quotes = clean_timestamps(stock_quotes)
+    print "&&&&&&&&&&&&&&&&&&&&&&&&"
+    print clean_stock_quotes
+    print "&&&&&&&&&&&&&&&&&&&&&&&&"
+    return clean_stock_quotes
 
 
 def verify_twitter_creds():

@@ -6,7 +6,8 @@
     <!-- Bootstrap core CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
     <!-- Custom styles for this template -->
-      <link href="/static/project.css" rel="stylesheet">
+    <link href="/static/project.css" rel="stylesheet">
+
 </head>
 <body>
     <!-- Static navbar -->
@@ -21,8 +22,9 @@
             <a class="navbar-brand" rel="home" href="/" title="Stock Sentiment Analysis">Stock Sentiment Analysis</a>
     </div>
 
+    <!-- TICKER SEARCH FORM -->
+    
     <div class="collapse navbar-collapse navbar-ex1-collapse">
-
         <div class="col-sm-3 col-md-3 pull-right">
         <form class="navbar-form" action="/stock-detail" role="search">
         <div class="input-group">
@@ -32,6 +34,8 @@
             </div>
         </div>
         </form>
+
+        <script src="/static/js/searchform.js"></script>
         </div>
 
     </div>
@@ -48,10 +52,10 @@
 {% endblock %}
 
 
-<!-- Bootstrap core JavaScript
+<!-- Bootstrap, Twitter, jQuery core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
-
+<script src="https://code.jquery.com/jquery.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
 

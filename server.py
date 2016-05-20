@@ -31,28 +31,27 @@ def stock_detail():
     """Show stock details"""
     ticker = request.args.get("ticker")
     current_stock = Stock.query.get(ticker)
-    # spx_member = Stock.query.filter_by(ticker="ticker").first()
+    spx_member = Stock.query.filter_by(ticker="ticker").first()
 
     # #Provide feedback to user on whether if ticker is valid
-    # if not spx_member:
-    #     flash("Please enter a valid ticker symbol")
+
+    ##Rows 34-39 gets me stuck on homepage even if stock is in db
+
+    if current_stock is None:
+        flash("Please enter a valid ticker symbol")
+        return render_template("homepage.html")
 
     quotes = current_stock.get_quotes()
     tweets = current_stock.get_tweets()
 
-    #num_results = len(quotes["series"])
-
-    # for i in range["num_results"]:
-    #     (datetime.datetime.fromtimestamp(
-    #         int(quotes["series"][i]["Timestamp"])
-    #         ).strftime('%Y-%m-%d %H:%M:%S'))
-    #     return quotes["series"][i]["Timestamp"]
-    #5/16 3pm last error:
-    #TypeError: 'builtin_function_or_method' object has no attribute '__getitem__'
-
     return render_template("stock-detail.html",
                            stock=current_stock,
                            quotes=quotes, tweets=tweets)
+
+
+# @app.route("/spx-member")
+# def is_spx_member():
+#     """Provide feedback to user on whether if ticker is valid"""
 
 
 if __name__ == "__main__":
