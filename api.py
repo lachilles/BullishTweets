@@ -87,12 +87,14 @@ def verify_twitter_creds():
     print api.VerifyCredentials()
 
 
-def get_tweets_by_api(ticker):
+def get_tweets_by_api(ticker, n):
     """Return latest tweets for past two weeks on a single ticker"""
     ticker = "$" + ticker
-    tweets = api.GetSearch(term=ticker, count=200)
+    tweets = api.GetSearch(term=ticker, count=n)
 
     return tweets
+
+
 
 
 ### reference http://fellowship.hackbrightacademy.com/materials/f14g/lectures/apis/

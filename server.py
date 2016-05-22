@@ -2,7 +2,7 @@
 
 from jinja2 import StrictUndefined
 
-from flask import Flask, render_template, redirect, request, flash, session
+from flask import Flask, render_template, redirect, request, flash, session, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 
 from model import Stock, connect_to_db, db
@@ -19,6 +19,23 @@ app.secret_key = "ABC"
 app.jinja_env.undefined = StrictUndefined
 
 
+# *** D3 ***
+def make_lines(clean_stock_quotes):
+    lines = {}
+    for quote in clean_stock_quotes:
+        return [{'Timestamp': quote, 'volume': lines[quote]} for quote in lines.keys()]
+
+
+def make_paths(lines):
+    index_lines = {}
+    for idx, n in enumerate(lines):
+        index_lines[n['Timestamp']] = (idx, n['volume'])
+    paths = []
+    for quote in index_lines:
+        paths.append({'source': index_lines[quote][0], 'target': index_lines[index_lines[quote][1]][0]})
+    return paths
+
+
 @app.route('/')
 def index():
     """Homepage."""
@@ -33,9 +50,7 @@ def stock_detail():
     current_stock = Stock.query.get(ticker)
     spx_member = Stock.query.filter_by(ticker="ticker").first()
 
-    # #Provide feedback to user on whether if ticker is valid
-
-    ##Rows 34-39 gets me stuck on homepage even if stock is in db
+    #Provide feedback to user on whether if ticker is valid
 
     if current_stock is None:
         flash("Please enter a valid ticker symbol")
@@ -47,6 +62,15 @@ def stock_detail():
     return render_template("stock-detail.html",
                            stock=current_stock,
                            quotes=quotes, tweets=tweets)
+
+
+@app.route("/bar-chart")
+def volume_to_bar():
+    """Send stock volume data to bar chart"""
+    lines = make_lines(clean_stock_quotes)
+    paths = make_paths(lines)
+    return jsonify({'lines': lines, 'paths': paths})
+
 
 
 # @app.route("/spx-member")

@@ -37,6 +37,10 @@ class Stock(db.Model):
         """Return last 200 tweets on ticker"""
         return get_tweets_by_api(self.ticker)
 
+    # def save_object(self, filename):
+    #     """Save python object"""
+    #     with open(filename,)
+
 #     # url='http://chartapi.finance.yahoo.com/instrument/1.0/AAPL/chartdata;type=quote;range=1d/csv'
     # response = requests.get(url)
     # response_body = response.content
@@ -50,22 +54,27 @@ class Stock(db.Model):
 
     #     return "$%.2f" % self.price
 
-# class Tweet(db.Model):
-#     """Tweets on stocks"""
+class Tweet(db.Model):
+    """Tweets on stocks"""
 
-#     ___tablename__ = "tweets"
+    ___tablename__ = "tweets"
 
-#     tweet_id = db.Column(db.String(64), nullable=False, primary_key=True)
-#     ticker = db.Column(db.String(6), db.ForeignKey('stocks.ticker'))
-#     date_time = db.Column(db.DateTime, nullable=True)
-#     text = db.Column(db.String(240), nullable=False)
-#     user = db.Column(db.String(10), nullable=False)
-#     sentiment = db.Column(db.Integer, nullable=True)
-    
-#     def __repr__(self):
-#         """Provide helpful representation when printed."""
+    tweet_id = db.Column(db.String(64), nullable=False, primary_key=True)  #id
+    ticker = db.Column(db.String(6), db.ForeignKey('stocks.ticker'))
+    date_time = db.Column(db.DateTime, nullable=True)  #created_at
+    text = db.Column(db.String(240), nullable=False)  #text
+    user = db.Column(db.String(64), nullable=False)  #screen_name
+    sentiment = db.Column(db.Integer, nullable=True)
+    retweet_count = db.Column(db.Integer, nullable=True)  #retweet_count
 
-#         return "Tweet tweet_id=%s ticker=%s text=%s user=%s>" % (self.tweet_id, self.ticker, self.text, self.user)
+    def __repr__(self):
+        """Provide helpful representation when printed."""
+
+        return "Tweet tweet_id=%s ticker=%s text=%s user=%s>" % (self.tweet_id, self.ticker, self.text, self.user)
+
+
+### How do I know what a good tweet is?
+
 
 ##############################################################################
 # Helper functions
