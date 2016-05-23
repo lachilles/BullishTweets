@@ -36,16 +36,20 @@ def load_stocks():
     # Once we're done, we should commit our work
     db.session.commit()
 
+
 def is_good_tweet(tweet):
     """Ignore tweets with more than 1 $ symbol and ignore retweets"""
+
     return tweet.text.count('$') == 1 and tweet.retweeted_status is None
+
 
 def load_tweets(n):
     """Return n tweets for a list of tickers"""
 
-    #For 10 sample tickers, retrieve 55 tweets each
+    #For 10 sample tickers, retrieve n tweets each
     tech_tickers = ['AAPL', 'FB', 'MSFT', 'GOOGL', 'HPQ', 'V', 'INTC', 'CSCO', 'IBM', 'ORCL']
     bad_tweets = 0
+    unique_tweet_ids = set()
 
     for ticker in tech_tickers:
         tweets = get_tweets_by_api(ticker, n)
@@ -55,23 +59,25 @@ def load_tweets(n):
         for tweet in tweets:
             if not is_good_tweet(tweet):
                 bad_tweets += 1
-                continue
+                # continue
+                #create tweet object
+            else:
+                if tweet.id not in unique_tweet_ids:
+                    t = Tweet(
+                        tweet_id=tweet.id,
+                        ticker=ticker,
+                        date_time=tweet.created_at,
+                        text=tweet.text,
+                        user=tweet.user.screen_name,
+                        retweet_count=tweet.retweet_count)
 
-            #create tweet object
-            t = Tweet(
-                tweet_id=tweet.id,
-                ticker=ticker,
-                date_time=tweet.created_at,
-                text=tweet.text,
-                user=tweet.user.screen_name,
-                retweet_count=tweet.retweet_count)
-
-            db.session.add(t)
-            count += 1
+                    db.session.add(t)
+                    count += 1
+                    unique_tweet_ids.add(tweet.id)
 
         print "Found " + str(count) + " good tweets for " + ticker
 
-    print "Found " + str(bad_tweets) + " total bad tweets out of" + str(n * len(tech_tickers))
+    print "Found " + str(bad_tweets) + " total bad tweets out of " + str(n * len(tech_tickers))
 
     db.session.commit()
 
