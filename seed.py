@@ -1,6 +1,6 @@
 """Utility file to seed stock data from S&P 500 constituents in seed_data/"""
 
-# from sqlalchemy import func
+from sqlalchemy import func
 from model import Stock, Tweet
 # from model import Stock
 
@@ -49,6 +49,7 @@ def load_tweets(n):
     #For 10 sample tickers, retrieve n tweets each
     tech_tickers = ['AAPL', 'FB', 'MSFT', 'GOOGL', 'HPQ', 'V', 'INTC', 'CSCO', 'IBM', 'ORCL']
     bad_tweets = 0
+    #Identify unique tweets in this set
     unique_tweet_ids = set()
 
     for ticker in tech_tickers:
@@ -81,6 +82,11 @@ def load_tweets(n):
 
     db.session.commit()
 
+# def load_new_tweets(n):
+#     """Append n tweets to DB since initial load"""
+
+#     session.query(func.max(tweet.tweet_id))
+
 
 if __name__ == "__main__":
     connect_to_db(app)
@@ -89,7 +95,7 @@ if __name__ == "__main__":
     db.create_all()
 
     # Delete tweets and stocks
-    Tweet.query.delete()
+    # Tweet.query.delete()
     Stock.query.delete()
     # Import different types of data
     load_stocks()

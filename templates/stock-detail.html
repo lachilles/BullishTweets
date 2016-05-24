@@ -7,7 +7,7 @@
     <p> {{ stock.industry }} </p>
     <!-- Possibly insert link to company overview for the stock -->
     <!-- JINJA tweet display sourced from http://hironow.bitbucket.org/blog/html/2014/01/12/jinja2_tweets_display.html -->
-<style>
+<!-- /*<style>
 
 .chart rect {
   fill: steelblue;
@@ -19,12 +19,10 @@
   text-anchor: end;
 }
 
-</style>
+</style>*/ -->
     <h2>Intraday Data</h2>
-<svg class="chart"></svg>
-<script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
-<script src="/static/js/stock-volume-bar.js"></script>
     <div class="container-fluid">
+        <div id="chart"></div>
         <div class="row">
             <div class="col-md-8">
                     <ul>
@@ -48,5 +46,7 @@
     </div>
 
 
+<script src='http://d3js.org/d3.v3.min.js' charset="utf-8"></script>
+<script src="/static/js/stock-volume-bar.js"></script>
 
 {% endblock %}

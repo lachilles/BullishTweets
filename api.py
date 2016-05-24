@@ -54,9 +54,6 @@ def get_quotes_by_api(ticker):
 
     url = 'http://chartapi.finance.yahoo.com/instrument/1.0/' + ticker + '/chartdata;type=quote;range=10d/json'
 
-    #Set payload
-    #payload = {'key1': 'value1', 'key2': ['value2', 'value3']}
-
     #Request data
     r = requests.get(url)
 
@@ -87,9 +84,14 @@ def verify_twitter_creds():
     print api.VerifyCredentials()
 
 
-def get_tweets_by_api(ticker, n):
+def get_tweets_by_api(ticker):
     """Return latest tweets for past two weeks on a single ticker"""
     ticker = "$" + ticker
+    n = 200
+    # Set payload
+    # payload = {'key1': 'value1', 'key2': ['value2', 'value3']}
+
+    #Request data
     tweets = api.GetSearch(term=ticker, count=n)
 
     return tweets

@@ -1,9 +1,9 @@
-var margin = {top: 20, right: 20, bottom: 70, left: 40},
-    width = 600 - margin.left - margin.right,
+var margin = {top: 20, right: 20, bottom: 70, left: 80},
+    width = 1200 - margin.left - margin.right,
     height = 300 - margin.top - margin.bottom;
 
 // Parse the date / time
-// var parseDate = d3.time.format("%Y-%m").parse;
+var parseDate = d3.time.format("%Y-%m-%d %H:%M:%S").parse;
 
 var x = d3.scale.ordinal().rangeRoundBands([0, width], .05);
 
@@ -19,20 +19,22 @@ var yAxis = d3.svg.axis()
     .orient("left")
     .ticks(10);
 
-var svg = d3.select("body").append("svg")
+var svg = d3.select("#chart").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
   .append("g")
     .attr("transform", 
           "translate(" + margin.left + "," + margin.top + ")");
 
-d3.json("bar-data.csv", function(error, data) {
+d3.json("/data.json", function(error, data) {
+    console.log("This is data" + data);
+    console.log("This is data 2" + JSON.stringify(data));
 
     data.forEach(function(d) {
-        // d.date = parseDate(d.date);
+        d.date = parseDate(d.date);
         d.value = +d.value;
     });
-    
+  
   x.domain(data.map(function(d) { return d.date; }));
   y.domain([0, d3.max(data, function(d) { return d.value; })]);
 
@@ -66,3 +68,5 @@ d3.json("bar-data.csv", function(error, data) {
       .attr("height", function(d) { return height - y(d.value); });
 
 });
+
+
