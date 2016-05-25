@@ -49,10 +49,11 @@ def clean_timestamps(stock_quotes):
 
 def get_quotes_by_api(ticker):
     """Return intraday quotes for past 10 days"""
-    ##Static url for AAPL##
-    #url = 'http://chartapi.finance.yahoo.com/instrument/1.0/AAPL/chartdata;type=quote;range=10d/json'
+    #return json.dumps([{"date":"2016-05-24 12:58:59","value":260100},{"date":"2016-05-24 12:59:00","value":719300},{"date":"2016-05-24 13:00:00","value":100}])
+    #Static url for AAPL##
+    url = 'http://chartapi.finance.yahoo.com/instrument/1.0/AAPL/chartdata;type=quote;range=10d/json'
 
-    url = 'http://chartapi.finance.yahoo.com/instrument/1.0/' + ticker + '/chartdata;type=quote;range=2d/json'
+    url = 'http://chartapi.finance.yahoo.com/instrument/1.0/' + ticker + '/chartdata;type=quote;range=1d/json'
 
     #Request data
     r = requests.get(url)

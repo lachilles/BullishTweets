@@ -47,7 +47,7 @@ def stock_detail():
 
     return render_template("stock-detail.html",
                            stock=current_stock,
-                           quotes=quotes, tweets=tweets)
+                           quotes=quotes[:5], tweets=tweets)
 
 
 @app.route("/data.json")
@@ -69,7 +69,7 @@ def get_bar_data():
     for i in range(len(quotes)):
         answer.append({'date': quotes[i]['Timestamp'], 'value': quotes[i]['volume']})
         print "The timestamp should be: " + quotes[i]['Timestamp']
-    return json.dumps(answer)
+    return json.dumps(answer[:5])
 
 # @app.route("/spx-member")
 # def is_spx_member():
