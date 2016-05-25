@@ -23,9 +23,9 @@ def load_stocks():
         ticker, name, sector, industry = row.split("\t")
         print row
         stock = Stock(ticker=ticker,
-                    name=name,
-                    sector=sector,
-                    industry=industry)
+                      name=name,
+                      sector=sector,
+                      industry=industry)
 
         # We need to add to the session or it won't ever be stored
         db.session.add(stock)
@@ -43,20 +43,25 @@ def is_good_tweet(tweet):
     return tweet.text.count('$') == 1 and tweet.retweeted_status is None
 
 
-def load_tweets(n):
+def load_tweets(count, since_id):
     """Return n tweets for a list of tickers"""
 
     #For 10 sample tickers, retrieve n tweets each
     tech_tickers = ['AAPL', 'FB', 'MSFT', 'GOOGL', 'HPQ', 'V', 'INTC', 'CSCO', 'IBM', 'ORCL']
     bad_tweets = 0
+
+    #Set payload for getting tweets
+    # if payload is None:
+    #     payload = {'count': n}
+
     #Identify unique tweets in this set
     unique_tweet_ids = set()
 
     for ticker in tech_tickers:
-        tweets = get_tweets_by_api(ticker, n)
+        tweets = get_tweets_by_api(term=ticker, count=count, since_id=since_id)
 
         #parse the tweets for this ticker
-        count = 0
+        counter = 0
         for tweet in tweets:
             if not is_good_tweet(tweet):
                 bad_tweets += 1
@@ -73,19 +78,23 @@ def load_tweets(n):
                         retweet_count=tweet.retweet_count)
 
                     db.session.add(t)
-                    count += 1
+                    counter += 1
                     unique_tweet_ids.add(tweet.id)
 
-        print "Found " + str(count) + " good tweets for " + ticker
+        print "Found " + str(counter) + " good tweets for " + ticker
 
-    print "Found " + str(bad_tweets) + " total bad tweets out of " + str(n * len(tech_tickers))
+    print "Found " + str(bad_tweets) + " total bad tweets out of " + str(count * len(tech_tickers))
 
     db.session.commit()
 
-# def load_new_tweets(n):
-#     """Append n tweets to DB since initial load"""
 
-#     session.query(func.max(tweet.tweet_id))
+def load_new_tweets(count):
+    """Append n tweets to DB since initial load"""
+
+    since_id = db.session.query(func.max(Tweet.tweet_id)).first()
+    since_id = int(since_id[0])
+
+    load_tweets(count=count, since_id=since_id)
 
 
 if __name__ == "__main__":
@@ -96,8 +105,11 @@ if __name__ == "__main__":
 
     # Delete tweets and stocks
     # Tweet.query.delete()
-    Stock.query.delete()
-    # Import different types of data
-    load_stocks()
+    # Stock.query.delete()
 
-    load_tweets(100)
+    # Import different types of data
+    # load_stocks()
+
+    # load_tweets(100)
+
+    load_new_tweets(count=100)

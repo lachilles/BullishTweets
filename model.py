@@ -34,7 +34,7 @@ class Stock(db.Model):
         return get_quotes_by_api(self.ticker)
 
     def get_tweets(self):
-        """Return last 200 tweets on ticker"""
+        """Return last tweets on ticker"""
         return get_tweets_by_api(self.ticker)
 
     # def save_object(self, filename):

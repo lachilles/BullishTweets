@@ -52,7 +52,7 @@ def get_quotes_by_api(ticker):
     ##Static url for AAPL##
     #url = 'http://chartapi.finance.yahoo.com/instrument/1.0/AAPL/chartdata;type=quote;range=10d/json'
 
-    url = 'http://chartapi.finance.yahoo.com/instrument/1.0/' + ticker + '/chartdata;type=quote;range=10d/json'
+    url = 'http://chartapi.finance.yahoo.com/instrument/1.0/' + ticker + '/chartdata;type=quote;range=2d/json'
 
     #Request data
     r = requests.get(url)
@@ -84,15 +84,12 @@ def verify_twitter_creds():
     print api.VerifyCredentials()
 
 
-def get_tweets_by_api(ticker):
+def get_tweets_by_api(term='AAPL', count=200, lang='en', since_id=None):
     """Return latest tweets for past two weeks on a single ticker"""
-    ticker = "$" + ticker
-    n = 200
-    # Set payload
-    # payload = {'key1': 'value1', 'key2': ['value2', 'value3']}
 
+    ticker = "$" + term
     #Request data
-    tweets = api.GetSearch(term=ticker, count=n)
+    tweets = api.GetSearch(term=ticker, count=count, lang=lang, since_id=since_id)
 
     return tweets
 

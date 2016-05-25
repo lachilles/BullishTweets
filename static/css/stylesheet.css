@@ -21,6 +21,6 @@ h2 {
   shape-rendering: crispEdges;
 }
 
-g.tick {
-    width: 20px;
+.tick {
+    width: 25px;
 }
