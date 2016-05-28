@@ -23,6 +23,7 @@ class Stock(db.Model):
     name = db.Column(db.String(42), nullable=False)
     sector = db.Column(db.String(30), nullable=False)
     industry = db.Column(db.String(56), nullable=False)
+    correlation = db.Column(db.Numeric)
 
     def __repr__(self):
         """Provide helpful representation when printed."""
@@ -60,17 +61,41 @@ class Tweet(db.Model):
     ___tablename__ = "tweets"
 
     tweet_id = db.Column(db.String(64), nullable=False, primary_key=True)  #id
+    tweet_id_str = db.Column(db.String(64), nullable=True) #id_str
     ticker = db.Column(db.String(6), db.ForeignKey('stocks.ticker'))
     date_time = db.Column(db.DateTime, nullable=True)  #created_at
     text = db.Column(db.String(240), nullable=False)  #text
     user = db.Column(db.String(64), nullable=False)  #screen_name
-    sentiment = db.Column(db.Integer, nullable=True)
     retweet_count = db.Column(db.Integer, nullable=True)  #retweet_count
+    sentiment_str = db.Column(db.String(10), nullable=True)
+    sentiment = db.Column(db.Numeric)
 
     def __repr__(self):
         """Provide helpful representation when printed."""
 
         return "Tweet tweet_id=%s ticker=%s text=%s user=%s>" % (self.tweet_id, self.ticker, self.text, self.user)
+
+
+# class Sentiment(db.Model):
+#     """Label to predict (positive/negative/neutral) - Sentiment on Tweet"""
+
+#     ___tablename__ = "sentiment"
+
+#     tweet_id = db.Column(db.String(64), db.ForeignKey('tweets.tweet_id'))
+#     sentiment = db.Column(db.Integer, nullable=True)
+#     sentiment_str = db.Column(db.String(8), nullable=True)
+#     sentnum_nltk = db.Column(db.Integer, nullable=True)
+#     sentiment_nltk = db.Column(db.String(10), nullable=True)
+
+# class Volatility(db.Model):
+#     """Price/volume movement on stocks"""
+
+#     ___tablename__ = "volatility"
+
+
+# class Correlation(db.Model)
+#     """Correlation between sentiment and """
+
 
 
 ### How do I know what a good tweet is?
@@ -99,4 +124,3 @@ if __name__ == "__main__":
     from server import app
     connect_to_db(app)
     print "Connected to DB."
-

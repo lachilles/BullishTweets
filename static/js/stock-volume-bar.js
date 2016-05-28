@@ -1,9 +1,11 @@
+// Source: http://bl.ocks.org/d3noob/8952219, http://bl.ocks.org/Caged/6476579
 // var margin = {top: 20, right: 20, bottom: 70, left: 80},
 //     width = 1200 - margin.left - margin.right,
 //     height = 300 - margin.top - margin.bottom;
 
 var parseDate = d3.time.format("%Y-%m-%d %H:%M:%S").parse;
 
+// Work on labels for x-axis
 var margin ={top:20, right:30, bottom:200, left:60},
     width=814-margin.left - margin.right,
     height=500-margin.top-margin.bottom;
@@ -11,7 +13,7 @@ var margin ={top:20, right:30, bottom:200, left:60},
 // Parse the date / time
 
 // scale to ordinal because x axis is not numerical
-var x = d3.scale.ordinal().rangeRoundBands([0, width], 0.01);
+var x = d3.scale.ordinal().rangeRoundBands([0, width], 0.1);
 
 
 //scale to numerical value by height
@@ -43,6 +45,13 @@ var yAxis = d3.svg.axis()
 //     .orient("left")
 //     .ticks(10);
 
+var tip = d3.tip()
+  .attr('class', 'd3-tip')
+  .offset([-10, 0])
+  .html(function(d) {
+    return "<strong>Volume:</strong> <span style='color:red'>" + d.value + "</span>";
+  });
+
 var svg = d3.select("#chart").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
@@ -50,6 +59,9 @@ var svg = d3.select("#chart").append("svg")
     .attr("transform",
           "translate(" + margin.left + "," + margin.top + ")");
 
+svg.call(tip);
+
+// Making an AJAX call to get data from /data.json route
 d3.json("/data.json", function(error, data) {
     console.log("This is data" + data);
     console.log("This is data 2" + JSON.stringify(data));
@@ -82,15 +94,21 @@ d3.json("/data.json", function(error, data) {
       .style("text-anchor", "end")
       .text("Volume (shares)");
 
-  svg.selectAll("bar")
+  svg.selectAll(".bar")
       .data(data)
     .enter().append("rect")
-      .style("fill", "steelblue")
+      .attr("class", "bar")
       .attr("x", function(d) { return x(d.date); })
       .attr("width", x.rangeBand())
       .attr("y", function(d) { return y(d.value); })
-      .attr("height", function(d) { return height - y(d.value); });
+      .attr("height", function(d) { return height - y(d.value); })
+      .on('mouseover', tip.show)
+      .on('mouseout', tip.hide);
 
 });
 
+function type(d) {
+  d.value = +d.value;
+  return d;
+}
 

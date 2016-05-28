@@ -2,3 +2,6 @@ env/
 *.pyc
 secret.sh
 googlefinance/
+.DS_Store
+python-twitter
+seed_data/

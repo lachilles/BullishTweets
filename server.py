@@ -42,23 +42,23 @@ def stock_detail():
         flash("Please enter a valid ticker symbol")
         return render_template("homepage.html")
 
-    quotes = current_stock.get_quotes()
+    quotes, bars = current_stock.get_quotes()
     tweets = current_stock.get_tweets()
 
     return render_template("stock-detail.html",
                            stock=current_stock,
-                           quotes=quotes[:5], tweets=tweets)
+                           quotes=quotes, tweets=tweets)
 
 
 @app.route("/data.json")
-def get_bar_data():
+def get_bars_data():
     """Send stock volume data to bar chart"""
     print "In our JSON route" + session.get("ticker")
     ticker = session.get("ticker")
     current_stock = Stock.query.get(ticker)
-    quotes = current_stock.get_quotes()
+    quotes, bars = current_stock.get_quotes()
     # print "****************************"
-    # print quotes
+    # print bars
     # print "****************************"
 
     # datetime = quotes.Timestamp
@@ -66,10 +66,11 @@ def get_bar_data():
 
     answer = []
 
-    for i in range(len(quotes)):
-        answer.append({'date': quotes[i]['Timestamp'], 'value': quotes[i]['volume']})
-        print "The timestamp should be: " + quotes[i]['Timestamp']
-    return json.dumps(answer[:5])
+    for key, value in bars.iteritems():
+        answer.append({'date': key, 'value': value})
+        # print "The timestamp should be: " + barss[key: value]
+    return json.dumps(answer)
+    # return json.dumps(barss)
 
 # @app.route("/spx-member")
 # def is_spx_member():
@@ -83,7 +84,7 @@ if __name__ == "__main__":
 
     connect_to_db(app)
 
-    # Use the DebugToolbar
+    # Use the DebugToolbars
     DebugToolbarExtension(app)
 
     app.run()

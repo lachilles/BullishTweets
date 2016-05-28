@@ -1,4 +1,6 @@
-"""Utility file to that performs functions related to ML"""
+"""Utility file that performs functions related to ML"""
+#Source: http://www.laurentluce.com/posts/twitter-sentiment-analysis-using-python-and-nltk/
+# https://indico.io/blog/plotlines/
 
 from sqlalchemy import func, update
 from model import Stock, Tweet
@@ -31,17 +33,17 @@ def label_tweets():
 
             if operator == 'p' or 'pos' or 'positive':
                 stmt = update(tweet).where(tweet.tweet_id==Tweet.tweet_id).\
-                values(sentiment='positive')
+                values(sentnum_tr='positive')
                 db.session.commit
                 print Tweet.tweet_id + " has a sentiment of " + Tweet.sentiment
             elif operator == 'neu' or 'neutral':
                 stmt = update(tweet).where(tweet.tweet_id==Tweet.tweet_id).\
-                values(sentiment='neutral')
+                values(sentnum_tr=0)
                 db.session.commit
                 print Tweet.tweet_id + " has a sentiment of " + Tweet.sentiment
             elif operator == 'neg' or 'negative':
                 stmt = update(tweet).where(tweet.tweet_id==Tweet.tweet_id).\
-                values(sentiment='negative')
+                values(sentnum_tr= -1)
                 db.session.commit
                 print Tweet.tweet_id + " has a sentiment of " + Tweet.sentiment
             elif operator == 'q':
@@ -51,6 +53,43 @@ def label_tweets():
                 print "I don't understand that sentiment"
 
 label_tweets()
+
+def create_training_set():
+    """Function to prepare a training set of tweets with labels"""
+
+    # Split training set into pos_tweets, neg_tweets list
+    pos_tweets = []
+    neg_tweets = []
+    tweets_w_labels = Tweet.query.filter_by(sentnum_tr != None).all()
+
+    for tweet in tweets:
+        if tweet.sentnum_tr == 0:
+            pass
+        elif tweet.sentnum_tr == 1:
+            pos_tweets += (str(tweet.text), 'positive')
+        elif tweet.sentnum_tr == -1:
+            neg_tweets += (str(tweet.text), 'negative')
+
+    #Take both lists and create a single list of tuples
+    tweets = []
+
+    for (words, sentiment) in pos_tweets + neg_tweets:
+        words_filtered = [e.lower() for e in words.split() if len(e) >= 3]
+        tweets.append((words_filtered, sentiment))
+
+    print "Tweets list: " + tweets
+
+    
+    
+    #Combined list with the training set of tweets
+
+
+
+
+
+
+
+
 
 if __name__ == "__main__":
     connect_to_db(app)

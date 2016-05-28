@@ -37,8 +37,63 @@ def load_stocks():
     db.session.commit()
 
 
+def load_tweets_from_txt():
+    """Load tweets from txt file into database."""
+
+    print "Tweets from txt"
+
+    count = 1
+    for row in open("seed_data/tweet-training-sets-import-tab.txt", "U"):
+        row = row.strip()
+        token = row.split("\t")
+        print token
+        print len(token)
+        if len(token) >= 10:
+
+            tweet_id = token[0]
+            ticker = token[1]
+            date_time = token[2]
+            text = token[3]
+            user = token[4]
+            retweet_count = token[5]
+            sentnum_tr = token[6]
+            sentiment_tr = token[7]
+            sentnum_nltk = token[8]
+            sentiment_nltk = token[9]
+
+            tweet = Tweet(tweet_id=tweet_id,
+                          ticker=ticker,
+                          date_time=date_time,
+                          text=text,
+                          user=user,
+                          retweet_count=retweet_count,
+                          sentnum_tr=sentnum_tr,
+                          sentiment_tr=sentiment_tr,
+                          sentnum_nltk=sentnum_nltk,
+                          sentiment_nltk=sentiment_nltk
+                          )
+
+            db.session.add(tweet)
+            print "added" + str(tweet)
+            print count
+            count += 1
+
+    db.session.commit()
+
+
 def is_good_tweet(tweet):
     """Ignore tweets with more than 1 $ symbol and ignore retweets"""
+
+    # if tweet.text.count('$') == 1:
+    #     continue
+    # elif tweet.id is not None:
+    #     continue
+    # elif tweet.retweeted_status is None:
+    #     return tweet
+    # else:
+    #     pass
+
+    # return tweet
 
     return tweet.text.count('$') == 1 and tweet.retweeted_status is None
 
@@ -71,11 +126,13 @@ def load_tweets(count, since_id):
                 if tweet.id not in unique_tweet_ids:
                     t = Tweet(
                         tweet_id=tweet.id,
+                        tweet_id_str=tweet.id_str,
                         ticker=ticker,
                         date_time=tweet.created_at,
                         text=tweet.text,
                         user=tweet.user.screen_name,
-                        retweet_count=tweet.retweet_count)
+                        retweet_count=tweet.retweet_count
+                        )
 
                     db.session.add(t)
                     counter += 1
@@ -104,12 +161,14 @@ if __name__ == "__main__":
     db.create_all()
 
     # Delete tweets and stocks
-    # Tweet.query.delete()
-    # Stock.query.delete()
+    Tweet.query.delete()
+    Stock.query.delete()
 
     # Import different types of data
-    # load_stocks()
+    load_stocks()
 
-    # load_tweets(100)
+    load_tweets(10000, None)
 
-    load_new_tweets(count=100)
+    # load_new_tweets(count=100)
+
+    # load_tweets_from_txt()
