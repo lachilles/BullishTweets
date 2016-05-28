@@ -52,6 +52,8 @@ var tip = d3.tip()
     return "<strong>Volume:</strong> <span style='color:red'>" + d.value + "</span>";
   });
 
+
+// #chart
 var svg = d3.select("#chart").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)

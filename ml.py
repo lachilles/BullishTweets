@@ -80,7 +80,6 @@ def create_training_set():
     print "Tweets list: " + tweets
 
     
-    
     #Combined list with the training set of tweets
 
 
