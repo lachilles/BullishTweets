@@ -25,6 +25,8 @@ class Stock(db.Model):
     industry = db.Column(db.String(56), nullable=False)
     correlation = db.Column(db.Numeric)
 
+    tweets = db.relationship('Tweet')
+
     def __repr__(self):
         """Provide helpful representation when printed."""
 
@@ -70,36 +72,41 @@ class Tweet(db.Model):
     sentiment_str = db.Column(db.String(10), nullable=True)
     sentiment = db.Column(db.Numeric)
 
+    stock = db.relationship('Stock')
+
     def __repr__(self):
         """Provide helpful representation when printed."""
 
         return "Tweet tweet_id=%s ticker=%s text=%s user=%s>" % (self.tweet_id, self.ticker, self.text, self.user)
 
 
-# class Sentiment(db.Model):
-#     """Label to predict (positive/negative/neutral) - Sentiment on Tweet"""
 
-#     ___tablename__ = "sentiment"
+##############################################################################
+#Creates test database
 
-#     tweet_id = db.Column(db.String(64), db.ForeignKey('tweets.tweet_id'))
-#     sentiment = db.Column(db.Integer, nullable=True)
-#     sentiment_str = db.Column(db.String(8), nullable=True)
-#     sentnum_nltk = db.Column(db.Integer, nullable=True)
-#     sentiment_nltk = db.Column(db.String(10), nullable=True)
+def example_data():
+    """Create some sample data."""
 
-# class Volatility(db.Model):
-#     """Price/volume movement on stocks"""
+    AAPL = Stock(ticker=AAPL,
+                 name='Apple Inc.',
+                 sector='Information Technology',
+                 industry='Technology Hardware, Storage & Peripherals',
+                 correlation=0.6)
 
-#     ___tablename__ = "volatility"
+    MSFT = Stock(ticker=MSFT,
+                 name='Microsoft Corporation',
+                 sector='Information Technology',
+                 industry='Software',
+                 correlation=0.5)
 
+    ORCL = Stock(ticker=ORCL,
+                 name='Oracle Corporation',
+                 sector='Information Technology',
+                 industry='Software',
+                 correlation=0.2)
 
-# class Correlation(db.Model)
-#     """Correlation between sentiment and """
-
-
-
-### How do I know what a good tweet is?
-
+    db.session.add_all([AAPL, MSFT, ORCL])
+    db.session.commit()
 
 ##############################################################################
 # Helper functions

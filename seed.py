@@ -2,11 +2,10 @@
 
 from sqlalchemy import func
 from model import Stock, Tweet
-# from model import Stock
-
 from model import connect_to_db, db
 from server import app
 from api import get_tweets_by_api
+import unicodedata
 
 # import datetime
 
@@ -84,17 +83,6 @@ def load_tweets_from_txt():
 def is_good_tweet(tweet):
     """Ignore tweets with more than 1 $ symbol and ignore retweets"""
 
-    # if tweet.text.count('$') == 1:
-    #     continue
-    # elif tweet.id is not None:
-    #     continue
-    # elif tweet.retweeted_status is None:
-    #     return tweet
-    # else:
-    #     pass
-
-    # return tweet
-
     return tweet.text.count('$') == 1 and tweet.retweeted_status is None
 
 
@@ -102,7 +90,19 @@ def load_tweets(count, since_id):
     """Return n tweets for a list of tickers"""
 
     #For 10 sample tickers, retrieve n tweets each
-    tech_tickers = ['AAPL', 'FB', 'MSFT', 'GOOGL', 'HPQ', 'V', 'INTC', 'CSCO', 'IBM', 'ORCL']
+    # tech_tickers = ['AAPL', 'FB', 'MSFT', 'GOOGL', 'HPQ', 'V', 'INTC', 'CSCO', 'IBM', 'ORCL']
+
+    #Fetch all Stocks
+    stocks = Stock.query.all()
+
+    #Iterate through Stocks and append ticker to list
+
+    SPX_constituents = []
+
+    for stock in stocks:
+        ticker = unicodedata.normalize('NFKD', stock.ticker).encode('ascii', 'ignore')
+        SPX_constituents.append(ticker)
+
     bad_tweets = 0
 
     #Set payload for getting tweets
@@ -112,7 +112,7 @@ def load_tweets(count, since_id):
     #Identify unique tweets in this set
     unique_tweet_ids = set()
 
-    for ticker in tech_tickers:
+    for ticker in SPX_constituents[301:400]:
         tweets = get_tweets_by_api(term=ticker, count=count, since_id=since_id)
 
         #parse the tweets for this ticker
@@ -138,9 +138,10 @@ def load_tweets(count, since_id):
                     counter += 1
                     unique_tweet_ids.add(tweet.id)
 
-        print "Found " + str(counter) + " good tweets for " + ticker
+        good_tweets = str(counter)
+        print "Found " + good_tweets + " good tweets for " + ticker
 
-    print "Found " + str(bad_tweets) + " total bad tweets out of " + str(count * len(tech_tickers))
+    print "Found " + str(bad_tweets) + " total bad tweets out of " + str(count * len(SPX_constituents))
 
     db.session.commit()
 
@@ -161,14 +162,14 @@ if __name__ == "__main__":
     db.create_all()
 
     # Delete tweets and stocks
-    Tweet.query.delete()
-    Stock.query.delete()
+    # Tweet.query.delete()
+    # Stock.query.delete()
 
     # Import different types of data
-    load_stocks()
+    # load_stocks()
 
-    load_tweets(10000, None)
+    # load_tweets(500, None)
 
-    # load_new_tweets(count=100)
+    load_new_tweets(count=500)
 
     # load_tweets_from_txt()

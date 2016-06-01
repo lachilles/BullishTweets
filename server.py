@@ -5,8 +5,8 @@ from jinja2 import StrictUndefined
 from flask import Flask, render_template, redirect, request, flash, session, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 import json
-
-from model import Stock, connect_to_db, db
+from sqlalchemy import func
+from model import Stock, Tweet, connect_to_db, db
 # need to import Tweet table as part of phase 2
 
 
@@ -22,19 +22,20 @@ app.jinja_env.undefined = StrictUndefined
 
 @app.route('/')
 def index():
-    """Homepage."""
+    """Homepage showing list of SPX members"""
+    stocks = Stock.query.all()
 
-    return render_template("homepage.html")
+    return render_template("homepage.html", stocks=stocks)
 
 
 @app.route("/stock-detail")
 def stock_detail():
-    """Show stock details"""
-    ticker = request.args.get("ticker")
+    """Show stock details on form submit"""
+    ticker = request.args.get("ticker").upper()
     session['ticker'] = ticker
     print "In our session is " + session['ticker']
     current_stock = Stock.query.get(ticker)
-    spx_member = Stock.query.filter_by(ticker="ticker").first()
+    # spx_member = Stock.query.filter_by(ticker="ticker").first()
 
     #Provide feedback to user on whether if ticker is valid
 
@@ -50,11 +51,26 @@ def stock_detail():
                            quotes=quotes, tweets=tweets)
 
 
+@app.route("/stock-detail/<ticker>")
+def stock_detail_from_link(ticker):
+    """Show stock details from links"""
+    current_stock = Stock.query.get(ticker)
+
+    quotes, bars = current_stock.get_quotes()
+    tweets = current_stock.get_tweets()
+
+    return render_template("stock-detail.html",
+                           stock=current_stock,
+                           quotes=quotes, tweets=tweets)
+
+
 @app.route("/data.json")
 def get_bars_data():
     """Send stock volume data to bar chart"""
     print "In our JSON route" + session.get("ticker")
     ticker = session.get("ticker")
+    # ticker = request.args.get("stock.ticker")
+
     current_stock = Stock.query.get(ticker)
     quotes, bars = current_stock.get_quotes()
     # print "****************************"
@@ -68,9 +84,9 @@ def get_bars_data():
 
     for key, value in bars.iteritems():
         answer.append({'date': key, 'value': value})
-        # print "The timestamp should be: " + barss[key: value]
+        # print "The timestamp should be: " + bars[key: value]
     return json.dumps(answer)
-    # return json.dumps(barss)
+
 
 # @app.route("/spx-member")
 # def is_spx_member():

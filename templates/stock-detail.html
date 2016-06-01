@@ -9,17 +9,32 @@
     <!-- JINJA tweet display sourced from http://hironow.bitbucket.org/blog/html/2014/01/12/jinja2_tweets_display.html -->
 
     <h2>Intraday Data</h2>
-    <link href="bootstrap.css" rel="stylesheet">
-    <link href="bootstrap-switch.css" rel="stylesheet">
-    <br>
     
-    <input type="radio" name="time" value="24">24hrs
+    <div class="container">
+    <div class="row">
+        <form class="form">
+        <div class="btn-group" id="timespan" name="timespan" role="group" aria-label="...">
+          <button type="button" value="24" class="btn btn-default timespan-button">24hr</button>
+          <button type="button" value="12" class="btn btn-default timespan-button">12hr</button>
+          <button type="button" value="1" class="btn btn-default timespan-button">1hr</button>
+        </div>
+        </form>
+   <!--  1) Add event listner to one button - console.log value
+    2) Use Jquery to select all items with name timespan (which will give back a list)
+    Iterate through the list.. for each item in list of buttons attach event listener
+    3) $.get send to /data.json
+    4) callback should be console.log("success")
+    5) replace 4 with renderChart (look at stock-volume-bar.js $.get("/data.json", {timespan: 24}, renderChart);)  
+    6) add new approute for /timespan-data.json-->
+    </div>
+
+<!--     <input type="radio" name="time" value="24">24hrs
     <input type="radio" name="time" value="12">12hrs  
     <input type="radio" name="time" value="1">1hr
 
     <script>$("[name='time']").bootstrapSwitch();</script>
 
-
+ -->
     <div class="container-fluid">
         
         <div class="row">
@@ -49,6 +64,7 @@
 
 <script src='http://d3js.org/d3.v3.min.js' charset="utf-8"></script>
 <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+<script src="/static/js/timespan.js"></script>
 <script src="/static/js/stock-volume-bar.js"></script>
 
 {% endblock %}
