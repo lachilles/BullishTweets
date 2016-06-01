@@ -112,7 +112,7 @@ def load_tweets(count, since_id):
     #Identify unique tweets in this set
     unique_tweet_ids = set()
 
-    for ticker in SPX_constituents[301:400]:
+    for ticker in SPX_constituents[401:]:
         tweets = get_tweets_by_api(term=ticker, count=count, since_id=since_id)
 
         #parse the tweets for this ticker

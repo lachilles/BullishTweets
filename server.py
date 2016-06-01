@@ -43,7 +43,7 @@ def stock_detail():
         flash("Please enter a valid ticker symbol")
         return render_template("homepage.html")
 
-    quotes, bars = current_stock.get_quotes()
+    quotes, bar = current_stock.get_quotes('24')
     tweets = current_stock.get_tweets()
 
     return render_template("stock-detail.html",
@@ -56,7 +56,7 @@ def stock_detail_from_link(ticker):
     """Show stock details from links"""
     current_stock = Stock.query.get(ticker)
 
-    quotes, bars = current_stock.get_quotes()
+    quotes, bar = current_stock.get_quotes()
     tweets = current_stock.get_tweets()
 
     return render_template("stock-detail.html",
@@ -64,28 +64,28 @@ def stock_detail_from_link(ticker):
                            quotes=quotes, tweets=tweets)
 
 
-@app.route("/data.json")
-def get_bars_data():
+@app.route("/data.json/<timespan>")
+def get_bar_data(timespan):
     """Send stock volume data to bar chart"""
     print "In our JSON route" + session.get("ticker")
     ticker = session.get("ticker")
     # ticker = request.args.get("stock.ticker")
 
     current_stock = Stock.query.get(ticker)
-    quotes, bars = current_stock.get_quotes()
-    # print "****************************"
-    # print bars
-    # print "****************************"
+    quotes, bar = current_stock.get_quotes(timespan)
+    print "****************************"
+    print timespan
+    print "****************************"
 
     # datetime = quotes.Timestamp
     # volume = quotes.volume
 
-    answer = []
+    result = []
 
-    for key, value in bars.iteritems():
-        answer.append({'date': key, 'value': value})
-        # print "The timestamp should be: " + bars[key: value]
-    return json.dumps(answer)
+    for key, value in bar.iteritems():
+        result.append({'date': key, 'value': value})
+        # print "The timestamp should be: " + bar[key: value]
+    return json.dumps(result)
 
 
 # @app.route("/spx-member")

@@ -32,9 +32,9 @@ class Stock(db.Model):
 
         return "Stock ticker=%s name=%s>" % (self.ticker, self.name)
 
-    def get_quotes(self):
+    def get_quotes(self, timespan):
         """Return intraday quotes for past 10 days"""
-        return get_quotes_by_api(self.ticker)
+        return get_quotes_by_api(self.ticker, timespan)
 
     def get_tweets(self):
         """Return last tweets on ticker"""

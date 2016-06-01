@@ -41,8 +41,15 @@ var svg = d3.select("#chart").append("svg")
 
 svg.call(tip);
 
+
 // Making an AJAX call to get data from /data.json route
-d3.json("/data.json", renderChart);
+// d3.json("/data.json/" + timespan, renderChart);
+
+function updateGraph(timespan) {
+    console.log("Made it to updateGraph");
+    d3.json("/data.json/" + timespan, renderChart);
+
+}
 
 function type(d) {
   d.value = +d.value;
@@ -93,4 +100,6 @@ function renderChart(error, data) {
       .on('mouseover', tip.show)
       .on('mouseout', tip.hide);
 
-};
+}
+
+updateGraph(24);
