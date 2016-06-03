@@ -7,6 +7,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 import json
 from sqlalchemy import func
 from model import Stock, Tweet, connect_to_db, db
+from sentiment import get_tweet_sentiment
 # need to import Tweet table as part of phase 2
 
 
@@ -52,11 +53,11 @@ def stock_detail():
 
 
 @app.route("/stock-detail/<ticker>")
-def stock_detail_from_link(ticker):
+def stock_detail_from_link(ticker, timespan=24):
     """Show stock details from links"""
     current_stock = Stock.query.get(ticker)
 
-    quotes, bar = current_stock.get_quotes()
+    quotes, bar = current_stock.get_quotes(timespan)
     tweets = current_stock.get_tweets()
 
     return render_template("stock-detail.html",
@@ -86,6 +87,68 @@ def get_bar_data(timespan):
         result.append({'date': key, 'value': value})
         # print "The timestamp should be: " + bar[key: value]
     return json.dumps(result)
+
+# can only have one route returning a json of: {bar chart data{},sentiment_data{}}?
+
+# @app.route("/scatterdata.json/<timespan>")
+# def get_scatter_data(timespan):
+#     """Send tweet sentiment to scatter plot"""
+#     print "In our JSON route" + session.get("ticker")
+#     ticker = session.get("ticker")
+#     current_stock = Stock.query.get(ticker)
+#     tweets = current_stock.get_tweets()
+
+#     tweets_json = json.dumps(tweets, default=lambda o: o.__dict__)
+
+
+
+    # tweets = []
+    # # tweets_w_sentiment = Tweet.query.filter(Tweet.sentiment is None).limit(5000).all()
+    # # unicodedata.normalize('NFKD', tweet.text).encode('ascii', 'ignore')
+    # #     tweets.append(tweet)
+
+    #     bar = {
+    #     # "2016-07-16 09:30:00": 250
+    # }
+    # num_results = len(stock_quotes["series"])
+
+    # # print "&&&&&&&&&&"
+    # # print "num_results is: " + str(num_results)
+    # # print "&&&&&&&&&&"
+
+    # print "&&&&&&&&&& TIMESPAN IS: &&&&&&&&&&"
+    # print timespan == '12'
+    # print timespan
+    # print "&&&&&&&&&&"
+
+    # clean_stock_quotes = []
+
+    # for i in range(num_results):
+    #     stock_quote = stock_quotes["series"][i]
+    #     unix_timestamp = stock_quote["Timestamp"]
+
+
+    # for tweet in tweets:
+    #     tweet = get_tweet_sentiment(tweet)
+    #     db.session.add(tweet)
+    #     db.commit()
+
+# @app.route("/sentiment")
+# def sentiment(ticker):
+#     """Container for sentiment area chart"""
+
+#     tweets_w_sentiment = Tweet.query.filter(Tweet.sentiment is not None).limit(5000).all()
+
+#     return render_template("sentiment.html", tweets_w_sentiment=tweets_w_sentiment)
+
+
+# @app.route("/admin")
+# def label_tweets(ticker):
+#     """Administrative function to label sentiment on tweets manually"""
+
+#     tweets_wo_sentiment = Tweet.query.filter(Tweet.sentiment is None).limit(5000).all()
+
+#     return render_template("admin.html", tweets_wo_sentiment=tweets_wo_sentiment)
 
 
 # @app.route("/spx-member")

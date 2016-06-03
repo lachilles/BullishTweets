@@ -6,7 +6,10 @@ import os   # To access our OS environment variables
 import twitter  # Import the necessary methods from "twitter" library
 from datetime import datetime
 import moment
-# from model import Stock
+# from tokenizer import Tokenizer
+# from model import Tweet, connect_to_db, db
+# from server import app
+# Moment documentation: https://github.com/zachwill/moment
 
 
 # Variables that contains the user credentials to access Twitter API
@@ -64,6 +67,9 @@ def get_tweets_by_api(term='AAPL', count=200, since_id=None):
 
     return tweets
 
+# def get_tweets_since_timespan():
+#     """Convert """
+
 
 def clean_timestamps(stock_quotes, timespan):
     """Transform Epoch timestamp to %Y-%m-%d %H:%M:%S"""
@@ -77,8 +83,9 @@ def clean_timestamps(stock_quotes, timespan):
     # print "num_results is: " + str(num_results)
     # print "&&&&&&&&&&"
 
-    print "&&&&&&&&&&"
-    print "timespan is: " + timespan
+    print "&&&&&&&&&& TIMESPAN IS: &&&&&&&&&&"
+    print timespan == '12'
+    print timespan
     print "&&&&&&&&&&"
 
     clean_stock_quotes = []
@@ -130,6 +137,45 @@ def clean_timestamps(stock_quotes, timespan):
         clean_stock_quotes.append(clean_stock_quote)
 
     return clean_stock_quotes, bar
+
+
+# def get_sentiment_by_api():
+#         """Gets tweet sentiment from sentiment140"""
+#         tweets_wo_sentiment = Tweet.query.filter(Tweet.sentiment is None).limit(5000).all()
+#         url = 'http://www.sentiment140.com/api/bulkClassifyJson'
+
+#         tweets = []
+
+#         for tweet in tweets_wo_sentiment:
+#                 tweets.append({"text": Tweet.text, "query": Tweet.ticker})
+
+#         info = {"data": tweets}
+#         data = json.dumps(info)
+
+#             #Request data
+#         r = requests.post(url, data)
+#         results = r.json()
+
+#         index = 0
+
+#         for result in results['data']:
+#             polarity = int(result['polarity'])
+
+#             if polarity == 4:
+#                 sentiment = 'positive'
+#             elif polarity == 0:
+#                 sentiment = 'negative'
+#             else:
+#                 sentiment = 'neutral'
+
+#             tweets_wo_sentiment[index].sentiment = sentiment
+#             index += 1
+
+#         db.session.commit()
+
+#         print "Tweet sentiments updated."
+
+
 
 # def round_to_nearest(num, base):
 #     """Function to round to nearest 30 minutes"""

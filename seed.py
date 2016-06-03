@@ -148,11 +148,22 @@ def load_tweets(count, since_id):
 
 def load_new_tweets(count):
     """Append n tweets to DB since initial load"""
+    #Fetch all Stocks
+    stocks = Stock.query.all()
 
-    since_id = db.session.query(func.max(Tweet.tweet_id)).first()
-    since_id = int(since_id[0])
+    #Iterate through Stocks and append ticker to list
 
-    load_tweets(count=count, since_id=since_id)
+    SPX_constituents = []
+
+    for stock in stocks:
+        ticker = unicodedata.normalize('NFKD', stock.ticker).encode('ascii', 'ignore')
+        SPX_constituents.append(ticker)
+
+    for ticker in SPX_constituents:
+        since_id = db.session.query(func.max(Tweet.tweet_id)).filter(Tweet.ticker == ticker).first()
+        since_id = int(since_id[0])
+
+        load_tweets(count=count, since_id=since_id)
 
 
 if __name__ == "__main__":
@@ -168,8 +179,8 @@ if __name__ == "__main__":
     # Import different types of data
     # load_stocks()
 
-    # load_tweets(500, None)
+    load_tweets(500, None)
 
-    load_new_tweets(count=500)
+    # load_new_tweets(count=500)
 
     # load_tweets_from_txt()

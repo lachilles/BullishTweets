@@ -10,11 +10,29 @@ body {
   font: 10px sans-serif;
 }
 
+path {
+    stroke: steelblue;
+    stroke-width: 2;
+    fill: none;
+}
+
 .axis path,
 .axis line {
   fill: none;
-  stroke: #000;
+  stroke: grey;
+  stroke-width: 1;
   shape-rendering: crispEdges;
+}
+
+.dot {
+  stroke: #000;
+}
+
+.tooltip {
+  position: absolute;
+  width: 200px;
+  height: 28px;
+  pointer-events: none;
 }
 
 .tick {

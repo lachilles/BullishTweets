@@ -3,6 +3,11 @@
 // Parse the date / time
 var parseDate = d3.time.format("%Y-%m-%d %H:%M:%S").parse;
 
+// Notes from https://github.com/d3/d3/wiki/Time-Formatting
+// var format = d3.time.format("%Y-%m-%d");
+// format.parse("2011-01-01"); // returns a Date
+// format(new Date(2011, 0, 1)); // returns a string
+
 // Work on labels for x-axis
 var margin ={top:20, right:30, bottom:200, left:60},
     width=814-margin.left - margin.right,
@@ -32,14 +37,14 @@ var tip = d3.tip()
 
 
 // #chart
-var svg = d3.select("#chart").append("svg")
-    .attr("width", width + margin.left + margin.right) //Set width
-    .attr("height", height + margin.top + margin.bottom)  //Set height
-  .append("g")
-    .attr("transform",
-          "translate(" + margin.left + "," + margin.top + ")");
+// var svg = d3.select("#bar-chart").append("svg")
+//     .attr("width", width + margin.left + margin.right) //Set width
+//     .attr("height", height + margin.top + margin.bottom)  //Set height
+//   .append("g")
+//     .attr("transform",
+//           "translate(" + margin.left + "," + margin.top + ")");
 
-svg.call(tip);
+// svg.call(tip);
 
 
 // Making an AJAX call to get data from /data.json route
@@ -51,6 +56,9 @@ function updateGraph(timespan) {
 
 }
 
+// select.empty (jquery)
+// select the svg element and empty it 
+
 function type(d) {
   d.value = +d.value;
   return d;
@@ -60,12 +68,21 @@ function type(d) {
 function renderChart(error, data) {
     console.log("This is data" + data);
     console.log("This is data 2" + JSON.stringify(data));
-
+    debugger;
     data.forEach(function(d) {
         d.date = parseDate(d.date);
         d.value = +d.value;
     });
   
+  var svg = d3.select("#bar-chart").append("svg")
+    .attr("width", width + margin.left + margin.right) //Set width
+    .attr("height", height + margin.top + margin.bottom)  //Set height
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+
+svg.call(tip);
+
   x.domain(data.map(function(d) { return d.date; }));
   y.domain([0, d3.max(data, function(d) { return d.value; })]);
 
