@@ -68,7 +68,6 @@ function type(d) {
 function renderChart(error, data) {
     console.log("This is data" + data);
     console.log("This is data 2" + JSON.stringify(data));
-    debugger;
     data.forEach(function(d) {
         d.date = parseDate(d.date);
         d.value = +d.value;
