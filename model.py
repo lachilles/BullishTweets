@@ -80,7 +80,6 @@ class Tweet(db.Model):
 
         return "Tweet tweet_id=%s ticker=%s text=%s user=%s>" % (self.tweet_id, self.ticker, self.text, self.user)
 
-
     def get_tweets(self):
         """Return last tweets on ticker"""
         return get_tweets_by_api(self.ticker)
@@ -89,16 +88,16 @@ class Tweet(db.Model):
         """Return last tweets in dictionary format"""
 
         tweet_dict = {
-                'id': self.tweet_id,
-                'id_str': self.tweet_id_str,
-                'ticker': self.ticker,
-                'date_time': self.date_time,
-                'text': self.text,
-                'user': self.user,
-                'retweet_count': self.retweet_count,
-                'sentiment_str': self.sentiment_str,
-                'sentiment': self.sentiment
-                }
+            'id': self.tweet_id,
+            'id_str': self.tweet_id_str,
+            'ticker': self.ticker,
+            'date_time': self.date_time,
+            'text': self.text,
+            'user': self.user,
+            'retweet_count': self.retweet_count,
+            'sentiment_str': self.sentiment_str,
+            'sentiment': self.sentiment
+            }
 
                 # (self.first_name+"-"+self.last_name).lower(),
         return tweet_dict

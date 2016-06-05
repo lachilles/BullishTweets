@@ -7,9 +7,11 @@ from flask_debugtoolbar import DebugToolbarExtension
 import json
 from sqlalchemy import func
 from model import Stock, Tweet, connect_to_db, db
-from sentiment import get_tweet_sentiment
+import unicodedata
+import moment
+from datetime import datetime
+from sentiment import Sentiment
 # need to import Tweet table as part of phase 2
-
 
 app = Flask(__name__)
 
@@ -74,9 +76,9 @@ def get_bar_data(timespan):
 
     current_stock = Stock.query.get(ticker)
     quotes, bar = current_stock.get_quotes(timespan)
-    print "****************************"
-    print timespan
-    print "****************************"
+    # print "****************************"
+    # print timespan
+    # print "****************************"
 
     # datetime = quotes.Timestamp
     # volume = quotes.volume
@@ -90,22 +92,41 @@ def get_bar_data(timespan):
 
 # can only have one route returning a json of: {bar chart data{},sentiment_data{}}?
 
-# @app.route("/scatterdata.json/<timespan>")
-# def get_scatter_data(timespan):
-#     """Send tweet sentiment to scatter plot"""
-#     print "In our JSON route" + session.get("ticker")
-#     ticker = session.get("ticker")
-#     current_stock = Stock.query.get(ticker)
-#     tweets = current_stock.get_tweets()
 
-#     tweets_json = json.dumps(tweets, default=lambda o: o.__dict__)
+@app.route("/scatterdata.json/<timespan>")
+def get_scatter_data(timespan):
+    """Send tweet sentiment to scatter plot"""
+    print "In our JSON route" + session.get("ticker")
+    ticker = session.get("ticker")
+    current_stock = Stock.query.get(ticker)
+    tweets = current_stock.get_tweets()
+    stocks = Stock.query.all()
+
+    # tweets_json = json.dumps(tweets, default=lambda o: o.__dict__)
+
+    result = []
+    s = Sentiment(stocks)
+    sentiment = None
+
+    for tweet in tweets:
+        tweet_text = unicodedata.normalize('NFKD', tweet.text).encode('ascii', 'ignore')
+        sentiment_str = s.get_tweet_sentiment(tweet_text)
+        if sentiment_str == 'positive':
+            sentiment = 1
+        if sentiment_str == 'negative':
+            sentiment = 0
+        created_at = unicodedata.normalize('NFKD', tweet.created_at).encode('ascii', 'ignore')
+        result.append({'datetime': created_at, 'sentiment': sentiment})
+    print "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&"
+    print result
+    print "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&"
+    return json.dumps(result)
 
 
 
-    # tweets = []
-    # # tweets_w_sentiment = Tweet.query.filter(Tweet.sentiment is None).limit(5000).all()
-    # # unicodedata.normalize('NFKD', tweet.text).encode('ascii', 'ignore')
-    # #     tweets.append(tweet)
+    # tweets_w_sentiment = Tweet.query.filter(Tweet.sentiment is None).limit(5000).all()
+    # unicodedata.normalize('NFKD', tweet.text).encode('ascii', 'ignore')
+    #     tweets.append(tweet)
 
     #     bar = {
     #     # "2016-07-16 09:30:00": 250
@@ -150,15 +171,13 @@ def get_bar_data(timespan):
 
 #     return render_template("admin.html", tweets_wo_sentiment=tweets_wo_sentiment)
 
-
 # @app.route("/spx-member")
 # def is_spx_member():
 #     """Provide feedback to user on whether if ticker is valid"""
 
-
 if __name__ == "__main__":
-    # We have to set debug=True here, since it has to be True at the point
-    # that we invoke the DebugToolbarExtension
+# We have to set debug=True here, since it has to be True at the point
+# that we invoke the DebugToolbarExtension
     app.debug = True
 
     connect_to_db(app)

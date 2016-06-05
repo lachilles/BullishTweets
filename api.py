@@ -40,9 +40,9 @@ def get_quotes_by_api(ticker, timespan):
     stock_quotes = json.loads(json_string)
 
     clean_stock_quotes, bar = clean_timestamps(stock_quotes, timespan)
-    print "&&&&&&&&&&&&&&&&&&&&&&&&"
-    print clean_stock_quotes
-    print "&&&&&&&&&&&&&&&&&&&&&&&&"
+    # print "&&&&&&&&&&&&&&&&&&&&&&&&"
+    # print clean_stock_quotes
+    # print "&&&&&&&&&&&&&&&&&&&&&&&&"
     return clean_stock_quotes, bar
 
 
