@@ -58,8 +58,8 @@ def verify_twitter_creds():
     print api.VerifyCredentials()
 
 
-def get_tweets_by_api(term='AAPL', count=200, since_id=None):
-    """Return 200 of the most popular tweets on a single ticker"""
+def get_tweets_by_api(term='AAPL', count=30, since_id=None):
+    """Return 30 of the most popular tweets on a single ticker"""
 
     ticker = "$" + term
     #Request data
@@ -89,6 +89,12 @@ def clean_timestamps(stock_quotes, timespan):
     print "&&&&&&&&&&"
 
     clean_stock_quotes = []
+    newest = 0
+    for i in range(num_results):
+        stock_quote = stock_quotes["series"][i]
+        unix_timestamp = stock_quote["Timestamp"]
+        if unix_timestamp > newest:
+            newest = unix_timestamp
 
     for i in range(num_results):
         stock_quote = stock_quotes["series"][i]
@@ -100,8 +106,10 @@ def clean_timestamps(stock_quotes, timespan):
 
         now = moment.utcnow().timezone("US/Eastern")
         if timespan == '1':
-            clean_timestamp = now.subtract(hours=1).format("YYYY-MM-DD HH:MM:ss")
-            bar[clean_timestamp] = stock_quote["volume"]
+            if (unix_timestamp > newest - 1 * 3600):
+            # clean_timestamp = now.subtract(hours=1).format("YYYY-MM-DD HH:MM:ss")
+                bar[unix_timestamp] = stock_quote["volume"]
+                bar[clean_timestamp] = stock_quote["volume"]
 
         elif timespan == '6':
             clean_timestamp = now.subtract(hours=6).format("YYYY-MM-DD HH:MM:ss")
@@ -138,49 +146,5 @@ def clean_timestamps(stock_quotes, timespan):
 
     return clean_stock_quotes, bar
 
-
-# def get_sentiment_by_api():
-#         """Gets tweet sentiment from sentiment140"""
-#         tweets_wo_sentiment = Tweet.query.filter(Tweet.sentiment is None).limit(5000).all()
-#         url = 'http://www.sentiment140.com/api/bulkClassifyJson'
-
-#         tweets = []
-
-#         for tweet in tweets_wo_sentiment:
-#                 tweets.append({"text": Tweet.text, "query": Tweet.ticker})
-
-#         info = {"data": tweets}
-#         data = json.dumps(info)
-
-#             #Request data
-#         r = requests.post(url, data)
-#         results = r.json()
-
-#         index = 0
-
-#         for result in results['data']:
-#             polarity = int(result['polarity'])
-
-#             if polarity == 4:
-#                 sentiment = 'positive'
-#             elif polarity == 0:
-#                 sentiment = 'negative'
-#             else:
-#                 sentiment = 'neutral'
-
-#             tweets_wo_sentiment[index].sentiment = sentiment
-#             index += 1
-
-#         db.session.commit()
-
-#         print "Tweet sentiments updated."
-
-
-
-# def round_to_nearest(num, base):
-#     """Function to round to nearest 30 minutes"""
-#     n = num + (base//2)
-
-#     return n - (n % base)
 
 ### reference http://fellowship.hackbrightacademy.com/materials/f14g/lectures/apis/

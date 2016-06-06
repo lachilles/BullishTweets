@@ -2,6 +2,7 @@
 
 // Parse the date / time
 var parseDate = d3.time.format("%Y-%m-%d %H:%M:%S").parse;
+// format(new Date(2011, 0, 1));
 
 // Notes from https://github.com/d3/d3/wiki/Time-Formatting
 // var format = d3.time.format("%Y-%m-%d");
@@ -9,8 +10,8 @@ var parseDate = d3.time.format("%Y-%m-%d %H:%M:%S").parse;
 // format(new Date(2011, 0, 1)); // returns a string
 
 // Work on labels for x-axis
-var margin ={top:20, right:30, bottom:200, left:60},
-    width=814-margin.left - margin.right,
+var margin ={top:20, right:30, bottom:200, left:70},
+    width=700-margin.left - margin.right,
     height=500-margin.top-margin.bottom;
 
 // scale to ordinal because x axis is not numerical

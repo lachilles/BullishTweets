@@ -10,6 +10,8 @@ from model import Stock, Tweet, connect_to_db, db
 import unicodedata
 import moment
 from datetime import datetime
+import time
+import random
 from sentiment import Sentiment
 # need to import Tweet table as part of phase 2
 
@@ -104,22 +106,28 @@ def get_scatter_data(timespan):
 
     # tweets_json = json.dumps(tweets, default=lambda o: o.__dict__)
 
+    # now = moment.utcnow().timezone("US/Eastern")
     result = []
     s = Sentiment(stocks)
     sentiment = None
+    negative = ['0.0', '0.1', '0.2', '0.3', '0.4', '0.5']
+    positive = ['0.6', '0.7', '0.8', '0.9', '1.0']
 
     for tweet in tweets:
         tweet_text = unicodedata.normalize('NFKD', tweet.text).encode('ascii', 'ignore')
+        # Get the sentiment of the tweet retured in either 'positive' or 'negative'
         sentiment_str = s.get_tweet_sentiment(tweet_text)
         if sentiment_str == 'positive':
-            sentiment = 1
+            sentiment = random.choice(positive)
         if sentiment_str == 'negative':
-            sentiment = 0
+            sentiment = random.choice(negative)
         created_at = unicodedata.normalize('NFKD', tweet.created_at).encode('ascii', 'ignore')
+        # Sun Jun 05 17:09:07 +0000 2016
+        created_at = time.strftime('%Y-%m-%d %H:%M:%S', time.strptime(created_at, '%a %b %d %H:%M:%S +0000 %Y'))
+        print "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&"
+        print created_at
+        print "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&"
         result.append({'datetime': created_at, 'sentiment': sentiment})
-    print "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&"
-    print result
-    print "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&"
     return json.dumps(result)
 
 
