@@ -19,6 +19,24 @@ ul {
   list-style-type:none
 }
 
+/*Centered text*/
+p1 {
+  position:absolute;
+  top:50%;
+  left:50%;
+  margin-top:-40px;  /*this is half the height of your div  */
+  margin-left:-250px; /*this is half of width of your div */
+}
+
+/*Centered searchbar*/
+#cent {
+  position:absolute;
+  top:50%;
+  left:50%;
+  margin-top:-50px;  /*this is half the height of your div  */
+  margin-left:-100px; /*this is half of width of your div */
+}
+
 path {
     stroke: steelblue;
     stroke-width: 2;

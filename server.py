@@ -89,7 +89,9 @@ def get_bar_data(timespan):
     for key, value in bar.iteritems():
         result.append({'date': key, 'value': value})
         # print "The timestamp should be: " + bar[key: value]
-    return json.dumps(result)
+    #sort dictionary by date
+    sorted_result = sorted(result, key=lambda k: k['date'])
+    return json.dumps(sorted_result)
 
 # can only have one route returning a json of: {bar chart data{},sentiment_data{}}?
 
@@ -113,77 +115,44 @@ def get_scatter_data(timespan):
     positive = ['0.6', '0.7', '0.8', '0.9', '1.0']
 
     for tweet in tweets:
-        tweet_text = unicodedata.normalize('NFKD', tweet.text).encode('ascii', 'ignore')
-        # Get the sentiment of the tweet retured in either 'positive' or 'negative'
-        sentiment_str = s.get_tweet_sentiment(tweet_text)
-        if sentiment_str == 'positive':
-            sentiment = random.choice(positive)
-        if sentiment_str == 'negative':
-            sentiment = random.choice(negative)
+        #create a moment that represents now - 24 hours
+        day_ago = moment.utcnow().timezone("US/Eastern").subtract(hours=24)
+        # convert unicode created_at to string
         created_at = unicodedata.normalize('NFKD', tweet.created_at).encode('ascii', 'ignore')
-        # Sun Jun 05 17:09:07 +0000 2016
+        # format created_at string to ISO 8610
         created_at_str = time.strftime('%Y-%m-%d %H:%M:%S', time.strptime(created_at, '%a %b %d %H:%M:%S +0000 %Y'))
-        # Below 4 lines returns duplicate timestamps... need a way to convert to US/EST timezone
         # create a moment from the string
-        # created_at = moment.date(created_at_str, 'YYYY-MM-DD HH:mm:ss')
+        created_at = moment.date(created_at_str, 'YYYY-MM-DD HH:mm:ss')
         # convert timezone of moment from UTC to Eastern time
-        # created_at_final = created_at.utcnow().timezone("US/Eastern")
-        print "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&"
-        print created_at_str
-        print "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&"
-        result.append({'datetime': created_at_str, 'sentiment': sentiment})
-    return json.dumps(result)
-
-    # tweets_w_sentiment = Tweet.query.filter(Tweet.sentiment is None).limit(5000).all()
-    # unicodedata.normalize('NFKD', tweet.text).encode('ascii', 'ignore')
-    #     tweets.append(tweet)
-
-    #     bar = {
-    #     # "2016-07-16 09:30:00": 250
-    # }
-    # num_results = len(stock_quotes["series"])
-
-    # # print "&&&&&&&&&&"
-    # # print "num_results is: " + str(num_results)
-    # # print "&&&&&&&&&&"
-
-    # print "&&&&&&&&&& TIMESPAN IS: &&&&&&&&&&"
-    # print timespan == '12'
-    # print timespan
-    # print "&&&&&&&&&&"
-
-    # clean_stock_quotes = []
-
-    # for i in range(num_results):
-    #     stock_quote = stock_quotes["series"][i]
-    #     unix_timestamp = stock_quote["Timestamp"]
+        created_at_final = created_at.utcnow().timezone("US/Eastern")
+        print created_at_final > day_ago
+        if tweet.text.count('$') == 1 and tweet.retweeted_status is None and created_at_final > day_ago:
+            # Convert tweet text from unicode to text
+            tweet_text = unicodedata.normalize('NFKD', tweet.text).encode('ascii', 'ignore')
+            # Get the sentiment of the tweet retured in either 'positive' or 'negative'
+            sentiment_str = s.get_tweet_sentiment(tweet_text)
+            if sentiment_str == 'positive':
+                sentiment = random.choice(positive)
+            if sentiment_str == 'negative':
+                sentiment = random.choice(negative)
+            created_at = unicodedata.normalize('NFKD', tweet.created_at).encode('ascii', 'ignore')
+            # Sun Jun 05 17:09:07 +0000 2016
+            created_at_str = time.strftime('%Y-%m-%d %H:%M:%S', time.strptime(created_at, '%a %b %d %H:%M:%S +0000 %Y'))
+            # Below 4 lines returns duplicate timestamps... need a way to convert to US/EST timezone
+            # create a moment from the string
+            # created_at = moment.date(created_at_str, 'YYYY-MM-DD HH:mm:ss')
+            # convert timezone of moment from UTC to Eastern time
+            # created_at_final = created_at.utcnow().timezone("US/Eastern")
+            print "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&"
+            print created_at_str
+            print "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&"
+            result.append({'datetime': created_at_str, 'sentiment': sentiment})
+    #sort dictionary by datetime
+    sorted_result = sorted(result, key=lambda k: k['datetime'])
+    return json.dumps(sorted_result)
 
 
-    # for tweet in tweets:
-    #     tweet = get_tweet_sentiment(tweet)
-    #     db.session.add(tweet)
-    #     db.commit()
-
-# @app.route("/sentiment")
-# def sentiment(ticker):
-#     """Container for sentiment area chart"""
-
-#     tweets_w_sentiment = Tweet.query.filter(Tweet.sentiment is not None).limit(5000).all()
-
-#     return render_template("sentiment.html", tweets_w_sentiment=tweets_w_sentiment)
-
-
-# @app.route("/admin")
-# def label_tweets(ticker):
-#     """Administrative function to label sentiment on tweets manually"""
-
-#     tweets_wo_sentiment = Tweet.query.filter(Tweet.sentiment is None).limit(5000).all()
-
-#     return render_template("admin.html", tweets_wo_sentiment=tweets_wo_sentiment)
-
-# @app.route("/spx-member")
-# def is_spx_member():
-#     """Provide feedback to user on whether if ticker is valid"""
+"""Provide feedback to user on whether if ticker is valid"""
 
 if __name__ == "__main__":
 # We have to set debug=True here, since it has to be True at the point

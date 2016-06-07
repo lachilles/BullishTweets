@@ -34,19 +34,28 @@
         
         <div class="row">
             <div class="col-md-8">
-                 <div id="scatter"></div>
-                 <div id="bar-chart"></div>
-                 <div id="quote_data">
-                  <ul>
+                <div id="bar-chart"></div>
+                <br>
+                <br>
+                <br>
+                <div id="scatter"></div>
+                <div id="quote_data">
+                <table class="table table-striped">
+                    <tr>
+                        <th>Timestamp</th>
+                        <th>Close Price</th>
+                        <th>Volume</th>
+                    </tr>
                     {% for item in quotes%}
-                        <li>
-                            {{ item.Timestamp }}
-                            {{ item.close }}
-                            {{ item.volume }}
-                        </li>
+                        <tr> 
+                            <td>{{ item.Timestamp }}</td>
+                            <td>{{ item.close }}</td>
+                            <td>{{ item.volume }}</td>
+                        </tr>                        
                     {% endfor %}
-                  </ul></div>
-            </div>
+                     </table>
+                </div>
+                </div>
             <div class="col-md-4">
                 {%- for tweet in tweets -%}
                     <blockquote class="twitter-tweet">
