@@ -6,10 +6,9 @@ from flask import Flask, render_template, redirect, request, flash, session, jso
 from flask_debugtoolbar import DebugToolbarExtension
 import json
 from sqlalchemy import func
-from model import Stock, Tweet, connect_to_db, db
+from model import Stock, connect_to_db
 import unicodedata
 import moment
-from datetime import datetime
 import time
 import random
 from sentiment import Sentiment
@@ -123,14 +122,17 @@ def get_scatter_data(timespan):
             sentiment = random.choice(negative)
         created_at = unicodedata.normalize('NFKD', tweet.created_at).encode('ascii', 'ignore')
         # Sun Jun 05 17:09:07 +0000 2016
-        created_at = time.strftime('%Y-%m-%d %H:%M:%S', time.strptime(created_at, '%a %b %d %H:%M:%S +0000 %Y'))
+        created_at_str = time.strftime('%Y-%m-%d %H:%M:%S', time.strptime(created_at, '%a %b %d %H:%M:%S +0000 %Y'))
+        # Below 4 lines returns duplicate timestamps... need a way to convert to US/EST timezone
+        # create a moment from the string
+        # created_at = moment.date(created_at_str, 'YYYY-MM-DD HH:mm:ss')
+        # convert timezone of moment from UTC to Eastern time
+        # created_at_final = created_at.utcnow().timezone("US/Eastern")
         print "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&"
-        print created_at
+        print created_at_str
         print "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&"
-        result.append({'datetime': created_at, 'sentiment': sentiment})
+        result.append({'datetime': created_at_str, 'sentiment': sentiment})
     return json.dumps(result)
-
-
 
     # tweets_w_sentiment = Tweet.query.filter(Tweet.sentiment is None).limit(5000).all()
     # unicodedata.normalize('NFKD', tweet.text).encode('ascii', 'ignore')

@@ -5,6 +5,8 @@ from model import Stock, Tweet
 from model import connect_to_db, db
 from server import app
 from api import get_tweets_by_api
+import time
+import moment
 import unicodedata
 
 # import datetime
@@ -81,9 +83,22 @@ def load_tweets_from_txt():
 
 
 def is_good_tweet(tweet):
-    """Ignore tweets with more than 1 $ symbol and ignore retweets"""
+    """Ignore tweets with more than 1 $ symbol, retweets, and anything older than 1 day"""
+    #create a moment that represents now - 24 hours
+    day_ago = moment.utcnow().timezone("US/Eastern").subtract(hours=24)
+    # convert unicode created_at to string
+    created_at = unicodedata.normalize('NFKD', tweet.created_at).encode('ascii', 'ignore')
+    # format created_at string to ISO 8610
+    created_at_str = time.strftime('%Y-%m-%d %H:%M:%S', time.strptime(created_at, '%a %b %d %H:%M:%S +0000 %Y'))
+    # create a moment from the string
+    created_at = moment.date(created_at_str, 'YYYY-MM-DD HH:mm:ss')
+    # convert timezone of moment from UTC to Eastern time
+    created_at_final = created_at.utcnow().timezone("US/Eastern")
+    print created_at_final > day_ago
+    return tweet.text.count('$') == 1 and tweet.retweeted_status is None and created_at_final > day_ago
 
-    return tweet.text.count('$') == 1 and tweet.retweeted_status is None
+
+    # return tweet.text.count('$') == 1 and tweet.retweeted_status is None
 
 
 def load_tweets(count, since_id):
@@ -179,7 +194,7 @@ if __name__ == "__main__":
     # Import different types of data
     # load_stocks()
 
-    load_tweets(500, None)
+    # load_tweets(500, None)
 
     # load_new_tweets(count=500)
 

@@ -6,6 +6,7 @@ import os   # To access our OS environment variables
 import twitter  # Import the necessary methods from "twitter" library
 from datetime import datetime
 import moment
+# from seed import is_good_tweet
 # from tokenizer import Tokenizer
 # from model import Tweet, connect_to_db, db
 # from server import app
@@ -58,13 +59,16 @@ def verify_twitter_creds():
     print api.VerifyCredentials()
 
 
-def get_tweets_by_api(term='AAPL', count=30, since_id=None):
+def get_tweets_by_api(term='AAPL', count=200, since_id=None):
     """Return 30 of the most popular tweets on a single ticker"""
 
     ticker = "$" + term
     #Request data
     tweets = api.GetSearch(term=ticker, count=count, lang='en', since_id=since_id)
-
+    # good_tweets = None
+    # for tweet in tweets:
+    #     if is_good_tweet(tweet):
+    #         good_tweets.append(tweet)
     return tweets
 
 # def get_tweets_since_timespan():
