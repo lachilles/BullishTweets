@@ -21,12 +21,10 @@ var x = d3.scale.ordinal().rangeRoundBands([0, width], 0.1);
 //scale to numerical value by height
 var y = d3.scale.linear().range([height, 0]);
 
-var xAxis = d3.svg.axis()
-              .scale(x)
+var xAxis = d3.svg.axis().scale(x)
               .orient("bottom");  //orient bottom because x-axis will appear below the bars
 
-var yAxis = d3.svg.axis()
-              .scale(y)
+var yAxis = d3.svg.axis().scale(y)
               .orient("left");
 
 var tip = d3.tip()
@@ -35,18 +33,6 @@ var tip = d3.tip()
   .html(function(d) {
     return "<strong>Volume:</strong> <span style='color:red'>" + d.value + "</span>";
   });
-
-
-// #chart
-// var svg = d3.select("#bar-chart").append("svg")
-//     .attr("width", width + margin.left + margin.right) //Set width
-//     .attr("height", height + margin.top + margin.bottom)  //Set height
-//   .append("g")
-//     .attr("transform",
-//           "translate(" + margin.left + "," + margin.top + ")");
-
-// svg.call(tip);
-
 
 // Making an AJAX call to get data from /data.json route
 // d3.json("/data.json/" + timespan, renderChart);

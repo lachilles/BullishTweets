@@ -10,24 +10,18 @@ h2 {
 }
 
 body {
-  font-family: 'Open Sans', sans-serif;;
+  font-family: 'Open Sans', sans-serif;
   /*font-weight: 100;*/
-  font: 10px 
+  font: 10px;
 }
 
 ul {
   list-style-type:none
 }
 
-/*Centered text*/
-p1 {
-  position:absolute;
-  top:50%;
-  left:50%;
-  margin-top:-40px;  /*this is half the height of your div  */
-  margin-left:-250px; /*this is half of width of your div */
+.header {
+  margin-left:10px;
 }
-
 /*Centered searchbar*/
 #cent {
   position:absolute;
@@ -38,7 +32,7 @@ p1 {
 }
 
 path {
-    stroke: steelblue;
+    stroke: none;
     stroke-width: 2;
     fill: none;
 }
@@ -52,7 +46,7 @@ path {
 }
 
 .dot {
-  stroke: #000;
+  stroke: #000
 }
 
 .tooltip {

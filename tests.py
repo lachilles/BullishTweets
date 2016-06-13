@@ -17,7 +17,7 @@ class FlaskTestsBasic(unittest.TestCase):
     def test_homepage(self):
         #Checks that the h1 is rendering in homepage.html
         result = self.client.get("/")
-        self.assertIn("<h1>Stock Sentiment Analysis</h1>", result.data)
+        self.assertIn("<h1>BullishTweets</h1>", result.data)
 
 
 class FlaskTestsDatabase(TestCase):
@@ -47,6 +47,12 @@ class FlaskTestsDatabase(TestCase):
         """Test create_bar_graph."""
 
         result = self.client.get("/data.json")
+        self.assertIn("?", result.data)
+
+    def test_scatter_graph(self):
+        """Test scatter_graph."""
+
+        result = self.client.get("/scatterdata.json")
         self.assertIn("?", result.data)
 
 if __name__ == "__main__":

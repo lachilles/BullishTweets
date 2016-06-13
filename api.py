@@ -41,9 +41,9 @@ def get_quotes_by_api(ticker, timespan):
     stock_quotes = json.loads(json_string)
 
     clean_stock_quotes, bar = clean_timestamps(stock_quotes, timespan)
-    # print "&&&&&&&&&&&&&&&&&&&&&&&&"
-    # print clean_stock_quotes
-    # print "&&&&&&&&&&&&&&&&&&&&&&&&"
+    print "&&&&&&&&&&&&&&&&&&&&&&&&"
+    print clean_stock_quotes
+    print "&&&&&&&&&&&&&&&&&&&&&&&&"
     return clean_stock_quotes, bar
 
 
@@ -93,12 +93,12 @@ def clean_timestamps(stock_quotes, timespan):
     print "&&&&&&&&&&"
 
     clean_stock_quotes = []
-    newest = 0
-    for i in range(num_results):
-        stock_quote = stock_quotes["series"][i]
-        unix_timestamp = stock_quote["Timestamp"]
-        if unix_timestamp > newest:
-            newest = unix_timestamp
+    # newest = 0
+    # for i in range(num_results):
+    #     stock_quote = stock_quotes["series"][i]
+    #     unix_timestamp = stock_quote["Timestamp"]
+        # if unix_timestamp > newest:
+        #     newest = unix_timestamp
 
     for i in range(num_results):
         stock_quote = stock_quotes["series"][i]
@@ -106,25 +106,30 @@ def clean_timestamps(stock_quotes, timespan):
 
         # Create moment from unix_timestamp, convert to EST timezone, and format
         clean_timestamp = moment.unix(unix_timestamp, utc=True).timezone("US/Eastern").format("YYYY-MM-DD HH:MM:ss")
-        prefix = moment.unix(unix_timestamp, utc=True).timezone("US/Eastern").strftime('%Y-%m-%d %H:')
 
-        now = moment.utcnow().timezone("US/Eastern")
+        # For each item in "series", create clean_stock_quote for table display in JINJA
+        clean_stock_quote = {"Timestamp": clean_timestamp, "close": stock_quote["close"],
+                             "volume": stock_quote["volume"]}
+
+        # Define prefix for 30 minute intervals
+        prefix = moment.unix(unix_timestamp, utc=True).timezone("US/Eastern").strftime('%Y-%m-%d %H:')
+        # now = moment.utcnow().timezone("US/Eastern")
         if timespan == '1':
-            if (unix_timestamp > newest - 1 * 3600):
+            # if (unix_timestamp > newest - 1 * 3600):
             # clean_timestamp = now.subtract(hours=1).format("YYYY-MM-DD HH:MM:ss")
-                bar[unix_timestamp] = stock_quote["volume"]
-                bar[clean_timestamp] = stock_quote["volume"]
+            # bar[unix_timestamp] = stock_quote["volume"]
+            bar[clean_timestamp] = stock_quote["volume"]
 
         elif timespan == '6':
-            clean_timestamp = now.subtract(hours=6).format("YYYY-MM-DD HH:MM:ss")
+            # clean_timestamp = now.subtract(hours=6).format("YYYY-MM-DD HH:MM:ss")
             bar[clean_timestamp] = stock_quote["volume"]
 
         elif timespan == '12':
-            clean_timestamp = now.subtract(hours=12).format("YYYY-MM-DD HH:MM:ss")
+            # clean_timestamp = now.subtract(hours=12).format("YYYY-MM-DD HH:MM:ss")
             bar[clean_timestamp] = stock_quote["volume"]
 
         elif timespan == '24':
-            clean_timestamp = now.subtract(hours=24).format("YYYY-MM-DD HH:MM:ss")
+            # clean_timestamp = now.subtract(hours=24).format("YYYY-MM-DD HH:MM:ss")
 
             # If minute is less than 30, take prefix and concatinate minutes
             # which becomes the bar key
@@ -134,15 +139,13 @@ def clean_timestamps(stock_quotes, timespan):
             else:
                 unix_timestamp = prefix + '30:00'
 
-            #Calculates sum of volume in time
+            #Calculates sum of volume in time.
+            #Is time in bar, if not append.
             if unix_timestamp in bar:
                 bar[unix_timestamp] = bar[unix_timestamp] + stock_quote["volume"]
             else:
                 bar[unix_timestamp] = stock_quote["volume"]
 
-        # is time in bar, if not append.
-        clean_stock_quote = {"Timestamp": clean_timestamp, "close": stock_quote["close"],
-                             "volume": stock_quote["volume"]}
 # timestamp, price, volume
 # clean_timestamp, close, volume
 

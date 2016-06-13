@@ -75,4 +75,4 @@ function renderChart2(error, data) {
 
 }
 
-updateGraph2(6);
+updateGraph2(24);
