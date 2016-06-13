@@ -83,22 +83,7 @@ def clean_timestamps(stock_quotes, timespan):
     }
     num_results = len(stock_quotes["series"])
 
-    # print "&&&&&&&&&&"
-    # print "num_results is: " + str(num_results)
-    # print "&&&&&&&&&&"
-
-    print "&&&&&&&&&& TIMESPAN IS: &&&&&&&&&&"
-    print timespan == '12'
-    print timespan
-    print "&&&&&&&&&&"
-
-    clean_stock_quotes = []
-    # newest = 0
-    # for i in range(num_results):
-    #     stock_quote = stock_quotes["series"][i]
-    #     unix_timestamp = stock_quote["Timestamp"]
-        # if unix_timestamp > newest:
-        #     newest = unix_timestamp
+    unsorted_stock_quotes = []
 
     for i in range(num_results):
         stock_quote = stock_quotes["series"][i]
@@ -110,27 +95,22 @@ def clean_timestamps(stock_quotes, timespan):
         # For each item in "series", create clean_stock_quote for table display in JINJA
         clean_stock_quote = {"Timestamp": clean_timestamp, "close": stock_quote["close"],
                              "volume": stock_quote["volume"]}
+        #Append clean_stock_quote to unsorted_stock_quotes list
+        unsorted_stock_quotes.append(clean_stock_quote)
 
         # Define prefix for 30 minute intervals
         prefix = moment.unix(unix_timestamp, utc=True).timezone("US/Eastern").strftime('%Y-%m-%d %H:')
-        # now = moment.utcnow().timezone("US/Eastern")
+
         if timespan == '1':
-            # if (unix_timestamp > newest - 1 * 3600):
-            # clean_timestamp = now.subtract(hours=1).format("YYYY-MM-DD HH:MM:ss")
-            # bar[unix_timestamp] = stock_quote["volume"]
             bar[clean_timestamp] = stock_quote["volume"]
 
         elif timespan == '6':
-            # clean_timestamp = now.subtract(hours=6).format("YYYY-MM-DD HH:MM:ss")
             bar[clean_timestamp] = stock_quote["volume"]
 
         elif timespan == '12':
-            # clean_timestamp = now.subtract(hours=12).format("YYYY-MM-DD HH:MM:ss")
             bar[clean_timestamp] = stock_quote["volume"]
 
         elif timespan == '24':
-            # clean_timestamp = now.subtract(hours=24).format("YYYY-MM-DD HH:MM:ss")
-
             # If minute is less than 30, take prefix and concatinate minutes
             # which becomes the bar key
 
@@ -146,10 +126,8 @@ def clean_timestamps(stock_quotes, timespan):
             else:
                 bar[unix_timestamp] = stock_quote["volume"]
 
-# timestamp, price, volume
-# clean_timestamp, close, volume
-
-        clean_stock_quotes.append(clean_stock_quote)
+    #Sort clean_stock_quotes by Timestamp
+    clean_stock_quotes = sorted(unsorted_stock_quotes, key=lambda k: k["Timestamp"])
 
     return clean_stock_quotes, bar
 
