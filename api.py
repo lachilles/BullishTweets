@@ -90,7 +90,7 @@ def clean_timestamps(stock_quotes, timespan):
         unix_timestamp = stock_quote["Timestamp"]
 
         # Create moment from unix_timestamp, convert to EST timezone, and format
-        clean_timestamp = moment.unix(unix_timestamp, utc=True).timezone("US/Eastern").format("YYYY-MM-DD HH:MM:ss")
+        clean_timestamp = moment.unix(unix_timestamp, utc=True).timezone("US/Eastern").format("YYYY-M-D HH:mm:ss")
 
         # For each item in "series", create clean_stock_quote for table display in JINJA
         clean_stock_quote = {"Timestamp": clean_timestamp, "close": stock_quote["close"],
