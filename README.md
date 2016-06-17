@@ -2,6 +2,12 @@
 
 BullishTweets allow users to search for any stock in the S&P 500 Index, and look at the most recent intraday trading activity, side by side with the most recent tweets on that stock. It performs sentiment analysis on the most recent tweets and allows the user to visualize bearish/bullish market trends as depicted by social media. 
 
+### Tech Stack
+* Languages: Python, Javascript, HTML5, CSS3, PosgreSQL
+* Frameworks/Libraries: Flask, D3, SQL Alchemy, jQuery, AJAX, Jinja, Bootrap, NLTK, Regex, Moment
+* APIs: Yahoo Finance, Twitter
+* Dependencies: Available in requirements.txt
+
 ### Features
 ##### Tweet Sentiment
 The sentiment analyzer uses a Naive Bayes classifier from Python's Natural Language Toolkit. The classifier was trained using a hand labeled set of 400 tweets. The scatter plot below is a D3 graph that visualizes sentiment over time.
@@ -22,9 +28,4 @@ The landing page and stock details page includes a search form that allows users
 
 ![landing](https://github.com/lachilles/HBProject/blob/master/static/images/landing.png)
 
-### Tech Stack
-* Languages: Python, Javascript, HTML5, CSS3, PosgreSQL
-* Frameworks/Libraries: Flask, D3, SQL Alchemy, jQuery, AJAX, Jinja, Bootrap, NLTK, Regex, Moment
-* APIs: Yahoo Finance, Twitter
-* Dependencies: Available in requirements.txt
 
